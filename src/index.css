@@ -17,7 +17,7 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 220 25% 20%;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
@@ -35,6 +35,18 @@ All colors MUST be HSL.
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
+
+    /* Payment Gateway Tool Colors */
+    --yellow-brand: 45 100% 65%;
+    --yellow-brand-foreground: 45 100% 10%;
+    --recommended: 120 100% 25%;
+    --recommended-foreground: 120 100% 95%;
+    --gateway-card: 0 0% 98%;
+    --gateway-border: 214.3 31.8% 88%;
+    
+    /* Gradients */
+    --gradient-header: linear-gradient(135deg, hsl(var(--yellow-brand)), hsl(45 100% 70%));
+    --gradient-card: linear-gradient(180deg, hsl(var(--gateway-card)), hsl(0 0% 96%));
 
     --radius: 0.5rem;
 

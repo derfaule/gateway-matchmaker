@@ -1,11 +1,55 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import GatewayForm, { FormData } from "@/components/GatewayForm";
+import GatewayResults from "@/components/GatewayResults";
 
 const Index = () => {
+  const [formData, setFormData] = useState<FormData>({
+    country: "",
+    industry: "",
+    annualRevenue: "",
+    avgSubscriptionAmount: 0,
+    avgSubscriptionsPerMonth: 0,
+    currencies: [],
+    paymentMethods: []
+  });
+  const [showResults, setShowResults] = useState(false);
+
+  const handleFormChange = (data: FormData, isComplete: boolean) => {
+    setFormData(data);
+    setShowResults(isComplete);
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <div className="min-h-screen bg-background">
+      {/* Header Section */}
+      <div className="bg-gradient-to-r from-yellow-brand to-yellow-brand/90 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-yellow-brand-foreground mb-4">
+              Find Your Perfect Payment Gateway
+            </h1>
+            <p className="text-lg text-yellow-brand-foreground/80 max-w-3xl mx-auto">
+              Recurly works with over 50 top payment gateways globally. Use our tool to quickly 
+              compare costs and find the best gateway for your country.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Form Section */}
+          <div>
+            <h2 className="text-2xl font-semibold mb-6">Tell us about your business</h2>
+            <GatewayForm onFormChange={handleFormChange} />
+          </div>
+
+          {/* Results Section */}
+          <div>
+            <GatewayResults formData={formData} showResults={showResults} />
+          </div>
+        </div>
       </div>
     </div>
   );

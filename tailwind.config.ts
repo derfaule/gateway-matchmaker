@@ -61,7 +61,17 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				'yellow-brand': {
+					DEFAULT: 'hsl(var(--yellow-brand))',
+					foreground: 'hsl(var(--yellow-brand-foreground))'
+				},
+				recommended: {
+					DEFAULT: 'hsl(var(--recommended))',
+					foreground: 'hsl(var(--recommended-foreground))'
+				},
+				'gateway-card': 'hsl(var(--gateway-card))',
+				'gateway-border': 'hsl(var(--gateway-border))'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
