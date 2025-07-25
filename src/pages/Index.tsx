@@ -38,17 +38,25 @@ const Index = () => {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className={`transition-all duration-500 ease-in-out ${
+          showResults 
+            ? 'grid grid-cols-1 lg:grid-cols-2 gap-8' 
+            : 'flex justify-center'
+        }`}>
           {/* Form Section */}
-          <div>
+          <div className={`transition-all duration-500 ease-in-out ${
+            showResults ? 'w-full' : 'w-full max-w-2xl'
+          }`}>
             <h2 className="text-2xl font-semibold mb-6">Tell us about your business</h2>
             <GatewayForm onFormChange={handleFormChange} />
           </div>
 
           {/* Results Section */}
-          <div>
-            <GatewayResults formData={formData} showResults={showResults} />
-          </div>
+          {showResults && (
+            <div className="transition-all duration-500 ease-in-out">
+              <GatewayResults formData={formData} showResults={showResults} />
+            </div>
+          )}
         </div>
       </div>
     </div>
