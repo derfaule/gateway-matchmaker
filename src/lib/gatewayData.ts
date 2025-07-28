@@ -30,7 +30,7 @@ export const gatewayDatabase: PaymentGateway[] = [
     id: "adyen",
     name: "Adyen",
     logo: "💳",
-    description: "End-to-end payments, data, and financial management platform",
+    description: "Best for enterprise; Arguably the most global gateway.",
     features: ["Global coverage", "Unified commerce", "Advanced fraud protection", "Local payment methods"],
     score: 0,
     supportedCurrencies: ["USD", "EUR", "GBP", "CAD", "AUD", "JPY", "CHF", "SEK", "NOK", "DKK", "SGD", "HKD", "BRL", "MXN", "INR", "CNY", "KRW", "ZAR", "RUB", "PLN", "CZK", "HUF", "THB", "MYR"],
@@ -74,7 +74,7 @@ export const gatewayDatabase: PaymentGateway[] = [
     id: "cybersource",
     name: "CyberSource",
     logo: "🔒",
-    description: "Payment management platform with fraud management",
+    description: "Gateway services available for Barclays (EU), Chase, Elavon, and TSYS and more.",
     features: ["Enterprise-grade security", "Global payment processing", "Risk management", "Token management"],
     score: 0,
     supportedCurrencies: ["USD", "EUR", "GBP", "CAD", "AUD", "JPY", "CHF", "SEK", "NOK", "DKK", "SGD", "HKD", "BRL", "MXN", "INR", "CNY", "KRW", "ZAR", "RUB", "PLN", "CZK", "HUF", "THB"],
@@ -96,7 +96,7 @@ export const gatewayDatabase: PaymentGateway[] = [
     id: "stripe",
     name: "Stripe",
     logo: "⚡",
-    description: "Payment infrastructure for the internet",
+    description: "Great for SMB > Enterprise. Enter new markets easily with wide range of APMs. Increase checkout conversion with Link by Stripe.",
     features: ["Developer-friendly APIs", "Global payments", "Subscription billing", "Marketplace payments"],
     score: 0,
     supportedCurrencies: ["USD", "EUR", "GBP", "CAD", "AUD", "JPY", "CHF", "SEK", "NOK", "DKK", "SGD", "HKD", "BRL", "MXN", "INR", "CNY", "KRW", "ZAR", "PLN", "CZK", "HUF", "THB", "MYR"],
@@ -118,7 +118,7 @@ export const gatewayDatabase: PaymentGateway[] = [
     id: "worldpay",
     name: "Worldpay",
     logo: "🌍",
-    description: "Global payment technology company",
+    description: "Vantiv is a US-only gateway; we prefer new merchants integrate with Worldpay Gateway.",
     features: ["Omnichannel payments", "Risk management", "Alternative payments", "Enterprise solutions"],
     score: 0,
     supportedCurrencies: ["USD", "EUR", "GBP", "CAD", "AUD", "JPY", "CHF", "SEK", "NOK", "DKK", "SGD", "HKD", "BRL", "MXN", "INR", "CNY", "KRW", "ZAR", "RUB", "PLN", "CZK", "HUF"],
@@ -140,7 +140,7 @@ export const gatewayDatabase: PaymentGateway[] = [
     id: "authorize",
     name: "Authorize.Net",
     logo: "🔐",
-    description: "Payment gateway service provider",
+    description: "Gateway services available for Barclays (EU), Chase, Elavon, and TSYS and more.",
     features: ["Fraud detection", "Recurring billing", "Customer profiles", "Virtual terminal"],
     score: 0,
     supportedCurrencies: ["USD", "CAD", "EUR", "GBP", "AUD"],
@@ -184,7 +184,7 @@ export const gatewayDatabase: PaymentGateway[] = [
     id: "braintree",
     name: "Braintree",
     logo: "🌳",
-    description: "Full-stack payment platform",
+    description: "Great for SMBs or growing merchants looking for a flexible, scalable, and developer-friendly payment solution. It's the only option for Venmo, and an alternative for PayPal direct integration. Note: Exploring Fastlane checkout for Braintree and PayPal Complete (no ETA).",
     features: ["Mobile-first", "Global reach", "Marketplace payments", "Subscription billing"],
     score: 0,
     supportedCurrencies: ["USD", "EUR", "GBP", "CAD", "AUD", "JPY", "CHF", "SEK", "NOK", "DKK", "SGD", "HKD", "BRL", "MXN", "THB", "MYR"],
@@ -200,6 +200,186 @@ export const gatewayDatabase: PaymentGateway[] = [
       "Subscription and recurring billing management",
       "Marketplace and split payment functionality",
       "Advanced vault for secure customer data storage"
+    ]
+  },
+  {
+    id: "vantiv",
+    name: "Vantiv",
+    logo: "🏪",
+    description: "Vantiv is a US-only gateway; we prefer new merchants integrate with Worldpay Gateway.",
+    features: ["US-only gateway", "Enterprise solutions", "Risk management", "Point-of-sale"],
+    score: 0,
+    supportedCurrencies: ["USD"],
+    supportedPaymentMethods: ["Visa", "MasterCard", "American Express", "Discover", "ACH", "eCheck"],
+    technicalDetails: [
+      "REST API and legacy SOAP services",
+      "SDKs for major programming languages",
+      "PCI DSS Level 1 compliant",
+      "Average transaction latency: 200ms",
+      "Basic fraud detection included",
+      "US-only processing capabilities"
+    ]
+  },
+  {
+    id: "stripe-elements",
+    name: "Stripe Elements",
+    logo: "⚡",
+    description: "Stripe Elements (third-party checkout) + APMs.",
+    features: ["Third-party checkout", "APMs", "Developer-friendly", "Conversion optimization"],
+    score: 0,
+    supportedCurrencies: ["USD", "EUR", "GBP", "CAD", "AUD", "JPY", "CHF", "SEK", "NOK", "DKK", "SGD", "HKD", "BRL", "MXN", "INR", "CNY", "KRW", "ZAR", "PLN", "CZK", "HUF", "THB", "MYR"],
+    supportedPaymentMethods: ["Visa", "MasterCard", "American Express", "Discover", "Apple Pay", "Google Pay", "Bank Transfer", "ACH", "SEPA Direct Debit", "iDEAL", "Klarna", "Afterpay", "Alipay", "WeChat Pay", "SOFORT", "Giropay", "Bancontact", "BLIK", "Przelewy24"],
+    technicalDetails: [
+      "Stripe Elements UI components",
+      "Third-party checkout optimization",
+      "Wide range of alternative payment methods",
+      "PCI DSS Level 1 compliant",
+      "Average transaction latency: 120ms",
+      "Built-in conversion optimization"
+    ]
+  },
+  {
+    id: "ebanx",
+    name: "Ebanx",
+    logo: "🌎",
+    description: "UPI in India. Coming in H2 2025: PIX recurring in Brazil & Mercado Pago in Mexico.",
+    features: ["Emerging markets", "Local payment methods", "UPI", "PIX recurring"],
+    score: 0,
+    supportedCurrencies: ["USD", "BRL", "MXN", "INR", "ARS", "COP", "PEN", "CLP"],
+    supportedPaymentMethods: ["Visa", "MasterCard", "American Express", "PIX", "UPI", "Mercado Pago", "OXXO", "Boleto"],
+    technicalDetails: [
+      "REST API with local market focus",
+      "SDKs for major programming languages",
+      "PCI DSS Level 1 compliant",
+      "Average transaction latency: 180ms",
+      "Local acquiring in emerging markets",
+      "Specialized in Latin America and India"
+    ]
+  },
+  {
+    id: "chase-orbital",
+    name: "Chase Orbital",
+    logo: "🚨",
+    description: "⚠️ Orbital is scheduled for deprecation in H1 2026. Chase is not supporting new Orbital merchant accounts. Existing and future merchants will integrate with CommercePlatform.",
+    features: ["Legacy gateway", "Scheduled deprecation", "Enterprise solutions", "US focus"],
+    score: 0,
+    supportedCurrencies: ["USD", "EUR", "GBP", "CAD"],
+    supportedPaymentMethods: ["Visa", "MasterCard", "American Express", "Discover", "ACH", "Wire Transfer"],
+    technicalDetails: [
+      "Legacy API (deprecation scheduled)",
+      "Limited SDK support",
+      "PCI DSS Level 1 compliant",
+      "Average transaction latency: 250ms",
+      "Chase banking integration",
+      "⚠️ Scheduled for deprecation H1 2026"
+    ]
+  },
+  {
+    id: "tsys",
+    name: "TSYS",
+    logo: "🇺🇸",
+    description: "U.S. only.",
+    features: ["US-only processing", "Enterprise solutions", "Card processing", "Merchant services"],
+    score: 0,
+    supportedCurrencies: ["USD"],
+    supportedPaymentMethods: ["Visa", "MasterCard", "American Express", "Discover", "ACH", "eCheck"],
+    technicalDetails: [
+      "REST API and legacy systems",
+      "SDKs for major programming languages",
+      "PCI DSS Level 1 compliant",
+      "Average transaction latency: 200ms",
+      "US-only processing capabilities",
+      "Enterprise merchant services"
+    ]
+  },
+  {
+    id: "amazon-pay-v2",
+    name: "Amazon Pay v2",
+    logo: "📦",
+    description: "Popular payment method for Amazon customers. Available for U.S., Europe, UK.",
+    features: ["Amazon customer base", "Regional availability", "Easy checkout", "Trusted brand"],
+    score: 0,
+    supportedCurrencies: ["USD", "EUR", "GBP", "JPY"],
+    supportedPaymentMethods: ["Amazon Pay", "Visa", "MasterCard", "American Express"],
+    technicalDetails: [
+      "Amazon Pay API v2",
+      "SDKs for major programming languages",
+      "PCI DSS compliant through Amazon",
+      "Average transaction latency: 150ms",
+      "Amazon customer authentication",
+      "Available in US, Europe, UK"
+    ]
+  },
+  {
+    id: "cardconnect",
+    name: "CardConnect",
+    logo: "🔗",
+    description: "U.S. and Canada only.",
+    features: ["US and Canada focus", "Payment processing", "Merchant services", "API integration"],
+    score: 0,
+    supportedCurrencies: ["USD", "CAD"],
+    supportedPaymentMethods: ["Visa", "MasterCard", "American Express", "Discover", "ACH", "eCheck"],
+    technicalDetails: [
+      "REST API with comprehensive documentation",
+      "SDKs for major programming languages",
+      "PCI DSS Level 1 compliant",
+      "Average transaction latency: 180ms",
+      "US and Canada processing only",
+      "Merchant services integration"
+    ]
+  },
+  {
+    id: "commerce-hub",
+    name: "Commerce Hub",
+    logo: "🏬",
+    description: "A full-service payment management platform.",
+    features: ["Full-service platform", "Payment management", "Enterprise solutions", "Global processing"],
+    score: 0,
+    supportedCurrencies: ["USD", "EUR", "GBP", "CAD", "AUD", "JPY", "CHF"],
+    supportedPaymentMethods: ["Visa", "MasterCard", "American Express", "Discover", "PayPal", "Apple Pay", "Google Pay", "ACH"],
+    technicalDetails: [
+      "Comprehensive API suite",
+      "SDKs for major programming languages",
+      "PCI DSS Level 1 compliant",
+      "Average transaction latency: 160ms",
+      "Full-service payment management",
+      "Enterprise-grade solutions"
+    ]
+  },
+  {
+    id: "gocardless",
+    name: "GoCardless",
+    logo: "💰",
+    description: "Specializes in direct debit payment methods. Alternative for ACH, BACS, BECS, SEPA especially for SMBs.",
+    features: ["Direct debit specialist", "SMB focus", "ACH alternative", "SEPA payments"],
+    score: 0,
+    supportedCurrencies: ["USD", "EUR", "GBP", "CAD", "AUD", "SEK", "DKK", "NOK"],
+    supportedPaymentMethods: ["ACH", "BACS", "BECS", "SEPA Direct Debit", "Bank Transfer"],
+    technicalDetails: [
+      "REST API focused on direct debit",
+      "SDKs for major programming languages",
+      "Bank-level security standards",
+      "Average transaction latency: 120ms",
+      "Specialized in recurring payments",
+      "Direct debit expertise for SMBs"
+    ]
+  },
+  {
+    id: "freedompay",
+    name: "FreedomPay",
+    logo: "🛒",
+    description: "Certified for POS/card present transactions. Online transaction certification in progress. Specific for omnichannel (not full-on gateway).",
+    features: ["POS specialist", "Omnichannel", "Card present", "Retail focus"],
+    score: 0,
+    supportedCurrencies: ["USD", "EUR", "GBP", "CAD"],
+    supportedPaymentMethods: ["Visa", "MasterCard", "American Express", "Discover", "Apple Pay", "Google Pay", "Contactless"],
+    technicalDetails: [
+      "POS-focused API",
+      "Omnichannel payment orchestration",
+      "PCI DSS Level 1 compliant",
+      "Average transaction latency: 140ms",
+      "Card present transaction specialist",
+      "Online certification in progress"
     ]
   }
 ];

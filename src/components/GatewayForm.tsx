@@ -15,6 +15,13 @@ export interface FormData {
   avgSubscriptionsPerMonth: number;
   currencies: string[];
   paymentMethods: string[];
+  // Detailed questions (optional)
+  projectedGrowthRate?: number;
+  localAcquiringNeeded?: boolean;
+  top80RevenueMarkets?: string[];
+  targetMarkets?: string[];
+  merchantOfRecord?: boolean;
+  fraudDetectionRequired?: boolean;
 }
 
 interface Props {
