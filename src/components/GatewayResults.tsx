@@ -14,10 +14,10 @@ import { Button } from "@/components/ui/button";
 interface Props {
   formData: FormData;
   showResults: boolean;
+  showDetailedQuestions: boolean;
 }
 
-export default function GatewayResults({ formData, showResults }: Props) {
-  const [showDetailedQuestions, setShowDetailedQuestions] = useState(false);
+export default function GatewayResults({ formData, showResults, showDetailedQuestions }: Props) {
   const [detailedData, setDetailedData] = useState<Partial<FormData>>({});
   const [marketSearch, setMarketSearch] = useState("");
   const [targetMarketSearch, setTargetMarketSearch] = useState("");
@@ -158,260 +158,239 @@ export default function GatewayResults({ formData, showResults }: Props) {
         </div>
       )}
 
-      {/* Detailed Questions Toggle */}
-      <div className="mt-8 pt-6 border-t border-border">
-        <div className="flex items-center space-x-3 p-4 bg-muted/50 rounded-lg">
-          <Switch
-            id="detailed-questions"
-            checked={showDetailedQuestions}
-            onCheckedChange={setShowDetailedQuestions}
-          />
-          <Label htmlFor="detailed-questions" className="text-sm font-medium cursor-pointer">
-            Answer more detailed questions for more accurate results.
-          </Label>
-        </div>
+      {/* Detailed Questions Section */}
+      {showDetailedQuestions && (
+        <Card className="mt-4 p-6 space-y-6 bg-accent/5 border-accent/20">
+          <div className="flex items-center justify-between">
+            <h4 className="text-lg font-semibold">Optional Details</h4>
+          </div>
 
-        {/* Detailed Questions Section */}
-        {showDetailedQuestions && (
-          <Card className="mt-4 p-6 space-y-6 bg-accent/5 border-accent/20">
-            <div className="flex items-center justify-between">
-              <h4 className="text-lg font-semibold">Optional Details</h4>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowDetailedQuestions(false)}
-              >
-                <ChevronUp className="w-4 h-4" />
-              </Button>
+          <div className="grid gap-6 md:grid-cols-2">
+            {/* Projected Growth Rate */}
+            <div className="space-y-2">
+              <Label htmlFor="growth-rate">
+                Projected Growth Rate <span className="text-muted-foreground">(Optional)</span>
+              </Label>
+              <div className="relative">
+                <Input
+                  id="growth-rate"
+                  type="number"
+                  placeholder="0"
+                  value={detailedData.projectedGrowthRate || ""}
+                  onChange={(e) => setDetailedData(prev => ({ 
+                    ...prev, 
+                    projectedGrowthRate: Number(e.target.value) 
+                  }))}
+                />
+                <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">%</span>
+              </div>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2">
-              {/* Projected Growth Rate */}
-              <div className="space-y-2">
-                <Label htmlFor="growth-rate">
-                  Projected Growth Rate <span className="text-muted-foreground">(Optional)</span>
-                </Label>
-                <div className="relative">
-                  <Input
-                    id="growth-rate"
-                    type="number"
-                    placeholder="0"
-                    value={detailedData.projectedGrowthRate || ""}
-                    onChange={(e) => setDetailedData(prev => ({ 
-                      ...prev, 
-                      projectedGrowthRate: Number(e.target.value) 
-                    }))}
+            {/* Local Acquiring Needed */}
+            <div className="space-y-2">
+              <Label>
+                Local Acquiring Needed? <span className="text-muted-foreground">(Optional)</span>
+              </Label>
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    id="acquiring-yes"
+                    name="localAcquiring"
+                    checked={detailedData.localAcquiringNeeded === true}
+                    onChange={() => setDetailedData(prev => ({ ...prev, localAcquiringNeeded: true }))}
+                    className="w-4 h-4"
                   />
-                  <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">%</span>
+                  <Label htmlFor="acquiring-yes" className="text-sm">Yes</Label>
                 </div>
-              </div>
-
-              {/* Local Acquiring Needed */}
-              <div className="space-y-2">
-                <Label>
-                  Local Acquiring Needed? <span className="text-muted-foreground">(Optional)</span>
-                </Label>
-                <div className="flex items-center space-x-4">
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="radio"
-                      id="acquiring-yes"
-                      name="localAcquiring"
-                      checked={detailedData.localAcquiringNeeded === true}
-                      onChange={() => setDetailedData(prev => ({ ...prev, localAcquiringNeeded: true }))}
-                      className="w-4 h-4"
-                    />
-                    <Label htmlFor="acquiring-yes" className="text-sm">Yes</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="radio"
-                      id="acquiring-no"
-                      name="localAcquiring"
-                      checked={detailedData.localAcquiringNeeded === false}
-                      onChange={() => setDetailedData(prev => ({ ...prev, localAcquiringNeeded: false }))}
-                      className="w-4 h-4"
-                    />
-                    <Label htmlFor="acquiring-no" className="text-sm">No</Label>
-                  </div>
-                </div>
-              </div>
-
-              {/* Top 80% Revenue Markets */}
-              <div className="space-y-2">
-                <Label>
-                  Which markets generate your top 80% of revenue today? <span className="text-muted-foreground">(Optional)</span>
-                </Label>
-                <div className="space-y-2">
-                  <Input
-                    placeholder="Search markets..."
-                    value={marketSearch}
-                    onChange={(e) => setMarketSearch(e.target.value)}
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    id="acquiring-no"
+                    name="localAcquiring"
+                    checked={detailedData.localAcquiringNeeded === false}
+                    onChange={() => setDetailedData(prev => ({ ...prev, localAcquiringNeeded: false }))}
+                    className="w-4 h-4"
                   />
-                  {marketSearch && (
-                    <div className="border border-border rounded-md bg-popover max-h-40 overflow-y-auto">
-                      {markets
-                        .filter(market => market.toLowerCase().includes(marketSearch.toLowerCase()))
-                        .slice(0, 5)
-                        .map(market => (
-                          <div
-                            key={market}
-                            className="px-3 py-2 hover:bg-accent cursor-pointer"
-                            onClick={() => {
-                              const currentMarkets = detailedData.top80RevenueMarkets || [];
-                              if (!currentMarkets.includes(market)) {
-                                setDetailedData(prev => ({
-                                  ...prev,
-                                  top80RevenueMarkets: [...currentMarkets, market]
-                                }));
-                              }
-                              setMarketSearch("");
-                            }}
-                          >
-                            {market}
-                          </div>
-                        ))}
-                    </div>
-                  )}
-                  <div className="flex flex-wrap gap-2">
-                    {(detailedData.top80RevenueMarkets || []).map(market => (
-                      <Badge key={market} variant="secondary" className="pr-1">
-                        {market}
-                        <X 
-                          className="w-3 h-3 ml-1 cursor-pointer" 
-                          onClick={() => {
-                            setDetailedData(prev => ({
-                              ...prev,
-                              top80RevenueMarkets: (prev.top80RevenueMarkets || []).filter(m => m !== market)
-                            }));
-                          }}
-                        />
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Target Markets */}
-              <div className="space-y-2">
-                <Label>
-                  Which markets are you targeting next? <span className="text-muted-foreground">(Optional)</span>
-                </Label>
-                <div className="space-y-2">
-                  <Input
-                    placeholder="Search target markets..."
-                    value={targetMarketSearch}
-                    onChange={(e) => setTargetMarketSearch(e.target.value)}
-                  />
-                  {targetMarketSearch && (
-                    <div className="border border-border rounded-md bg-popover max-h-40 overflow-y-auto">
-                      {markets
-                        .filter(market => market.toLowerCase().includes(targetMarketSearch.toLowerCase()))
-                        .slice(0, 5)
-                        .map(market => (
-                          <div
-                            key={market}
-                            className="px-3 py-2 hover:bg-accent cursor-pointer"
-                            onClick={() => {
-                              const currentTargets = detailedData.targetMarkets || [];
-                              if (!currentTargets.includes(market)) {
-                                setDetailedData(prev => ({
-                                  ...prev,
-                                  targetMarkets: [...currentTargets, market]
-                                }));
-                              }
-                              setTargetMarketSearch("");
-                            }}
-                          >
-                            {market}
-                          </div>
-                        ))}
-                    </div>
-                  )}
-                  <div className="flex flex-wrap gap-2">
-                    {(detailedData.targetMarkets || []).map(market => (
-                      <Badge key={market} variant="secondary" className="pr-1">
-                        {market}
-                        <X 
-                          className="w-3 h-3 ml-1 cursor-pointer" 
-                          onClick={() => {
-                            setDetailedData(prev => ({
-                              ...prev,
-                              targetMarkets: (prev.targetMarkets || []).filter(m => m !== market)
-                            }));
-                          }}
-                        />
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Merchant of Record */}
-              <div className="space-y-2">
-                <Label>
-                  Are you a Merchant of Record/Payout Requirements? <span className="text-muted-foreground">(Optional)</span>
-                </Label>
-                <div className="flex items-center space-x-4">
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="radio"
-                      id="merchant-yes"
-                      name="merchantOfRecord"
-                      checked={detailedData.merchantOfRecord === true}
-                      onChange={() => setDetailedData(prev => ({ ...prev, merchantOfRecord: true }))}
-                      className="w-4 h-4"
-                    />
-                    <Label htmlFor="merchant-yes" className="text-sm">Yes</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="radio"
-                      id="merchant-no"
-                      name="merchantOfRecord"
-                      checked={detailedData.merchantOfRecord === false}
-                      onChange={() => setDetailedData(prev => ({ ...prev, merchantOfRecord: false }))}
-                      className="w-4 h-4"
-                    />
-                    <Label htmlFor="merchant-no" className="text-sm">No</Label>
-                  </div>
-                </div>
-              </div>
-
-              {/* Fraud Detection Required */}
-              <div className="space-y-2">
-                <Label>
-                  Do you require Fraud Detection? <span className="text-muted-foreground">(Optional)</span>
-                </Label>
-                <div className="flex items-center space-x-4">
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="radio"
-                      id="fraud-yes"
-                      name="fraudDetection"
-                      checked={detailedData.fraudDetectionRequired === true}
-                      onChange={() => setDetailedData(prev => ({ ...prev, fraudDetectionRequired: true }))}
-                      className="w-4 h-4"
-                    />
-                    <Label htmlFor="fraud-yes" className="text-sm">Yes</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="radio"
-                      id="fraud-no"
-                      name="fraudDetection"
-                      checked={detailedData.fraudDetectionRequired === false}
-                      onChange={() => setDetailedData(prev => ({ ...prev, fraudDetectionRequired: false }))}
-                      className="w-4 h-4"
-                    />
-                    <Label htmlFor="fraud-no" className="text-sm">No</Label>
-                  </div>
+                  <Label htmlFor="acquiring-no" className="text-sm">No</Label>
                 </div>
               </div>
             </div>
-          </Card>
-        )}
-      </div>
+
+            {/* Top 80% Revenue Markets */}
+            <div className="space-y-2">
+              <Label>
+                Which markets generate your top 80% of revenue today? <span className="text-muted-foreground">(Optional)</span>
+              </Label>
+              <div className="space-y-2">
+                <Input
+                  placeholder="Search markets..."
+                  value={marketSearch}
+                  onChange={(e) => setMarketSearch(e.target.value)}
+                />
+                {marketSearch && (
+                  <div className="border border-border rounded-md bg-popover max-h-40 overflow-y-auto">
+                    {markets
+                      .filter(market => market.toLowerCase().includes(marketSearch.toLowerCase()))
+                      .slice(0, 5)
+                      .map(market => (
+                        <div
+                          key={market}
+                          className="px-3 py-2 hover:bg-accent cursor-pointer"
+                          onClick={() => {
+                            const currentMarkets = detailedData.top80RevenueMarkets || [];
+                            if (!currentMarkets.includes(market)) {
+                              setDetailedData(prev => ({
+                                ...prev,
+                                top80RevenueMarkets: [...currentMarkets, market]
+                              }));
+                            }
+                            setMarketSearch("");
+                          }}
+                        >
+                          {market}
+                        </div>
+                      ))}
+                  </div>
+                )}
+                <div className="flex flex-wrap gap-2">
+                  {(detailedData.top80RevenueMarkets || []).map(market => (
+                    <Badge key={market} variant="secondary" className="pr-1">
+                      {market}
+                      <X 
+                        className="w-3 h-3 ml-1 cursor-pointer" 
+                        onClick={() => {
+                          setDetailedData(prev => ({
+                            ...prev,
+                            top80RevenueMarkets: (prev.top80RevenueMarkets || []).filter(m => m !== market)
+                          }));
+                        }}
+                      />
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Target Markets */}
+            <div className="space-y-2">
+              <Label>
+                Which markets are you targeting next? <span className="text-muted-foreground">(Optional)</span>
+              </Label>
+              <div className="space-y-2">
+                <Input
+                  placeholder="Search target markets..."
+                  value={targetMarketSearch}
+                  onChange={(e) => setTargetMarketSearch(e.target.value)}
+                />
+                {targetMarketSearch && (
+                  <div className="border border-border rounded-md bg-popover max-h-40 overflow-y-auto">
+                    {markets
+                      .filter(market => market.toLowerCase().includes(targetMarketSearch.toLowerCase()))
+                      .slice(0, 5)
+                      .map(market => (
+                        <div
+                          key={market}
+                          className="px-3 py-2 hover:bg-accent cursor-pointer"
+                          onClick={() => {
+                            const currentTargets = detailedData.targetMarkets || [];
+                            if (!currentTargets.includes(market)) {
+                              setDetailedData(prev => ({
+                                ...prev,
+                                targetMarkets: [...currentTargets, market]
+                              }));
+                            }
+                            setTargetMarketSearch("");
+                          }}
+                        >
+                          {market}
+                        </div>
+                      ))}
+                  </div>
+                )}
+                <div className="flex flex-wrap gap-2">
+                  {(detailedData.targetMarkets || []).map(market => (
+                    <Badge key={market} variant="secondary" className="pr-1">
+                      {market}
+                      <X 
+                        className="w-3 h-3 ml-1 cursor-pointer" 
+                        onClick={() => {
+                          setDetailedData(prev => ({
+                            ...prev,
+                            targetMarkets: (prev.targetMarkets || []).filter(m => m !== market)
+                          }));
+                        }}
+                      />
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Merchant of Record */}
+            <div className="space-y-2">
+              <Label>
+                Are you a Merchant of Record/Payout Requirements? <span className="text-muted-foreground">(Optional)</span>
+              </Label>
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    id="merchant-yes"
+                    name="merchantOfRecord"
+                    checked={detailedData.merchantOfRecord === true}
+                    onChange={() => setDetailedData(prev => ({ ...prev, merchantOfRecord: true }))}
+                    className="w-4 h-4"
+                  />
+                  <Label htmlFor="merchant-yes" className="text-sm">Yes</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    id="merchant-no"
+                    name="merchantOfRecord"
+                    checked={detailedData.merchantOfRecord === false}
+                    onChange={() => setDetailedData(prev => ({ ...prev, merchantOfRecord: false }))}
+                    className="w-4 h-4"
+                  />
+                  <Label htmlFor="merchant-no" className="text-sm">No</Label>
+                </div>
+              </div>
+            </div>
+
+            {/* Fraud Detection Required */}
+            <div className="space-y-2">
+              <Label>
+                Do you require Fraud Detection? <span className="text-muted-foreground">(Optional)</span>
+              </Label>
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    id="fraud-yes"
+                    name="fraudDetection"
+                    checked={detailedData.fraudDetectionRequired === true}
+                    onChange={() => setDetailedData(prev => ({ ...prev, fraudDetectionRequired: true }))}
+                    className="w-4 h-4"
+                  />
+                  <Label htmlFor="fraud-yes" className="text-sm">Yes</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    id="fraud-no"
+                    name="fraudDetection"
+                    checked={detailedData.fraudDetectionRequired === false}
+                    onChange={() => setDetailedData(prev => ({ ...prev, fraudDetectionRequired: false }))}
+                    className="w-4 h-4"
+                  />
+                  <Label htmlFor="fraud-no" className="text-sm">No</Label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Card>
+      )}
     </div>
   );
 }

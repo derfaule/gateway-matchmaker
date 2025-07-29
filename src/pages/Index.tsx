@@ -13,10 +13,15 @@ const Index = () => {
     paymentMethods: []
   });
   const [showResults, setShowResults] = useState(false);
+  const [showDetailedQuestions, setShowDetailedQuestions] = useState(false);
 
   const handleFormChange = (data: FormData, isComplete: boolean) => {
     setFormData(data);
     setShowResults(isComplete);
+  };
+
+  const handleDetailedQuestionsToggle = (enabled: boolean) => {
+    setShowDetailedQuestions(enabled);
   };
 
   return (
@@ -48,13 +53,20 @@ const Index = () => {
             showResults ? 'w-full' : 'w-full max-w-2xl'
           }`}>
             <h2 className="text-2xl font-semibold mb-6">Tell us about your business</h2>
-            <GatewayForm onFormChange={handleFormChange} />
+            <GatewayForm 
+              onFormChange={handleFormChange} 
+              onDetailedQuestionsToggle={handleDetailedQuestionsToggle}
+            />
           </div>
 
           {/* Results Section */}
           {showResults && (
             <div className="transition-all duration-500 ease-in-out">
-              <GatewayResults formData={formData} showResults={showResults} />
+              <GatewayResults 
+                formData={formData} 
+                showResults={showResults} 
+                showDetailedQuestions={showDetailedQuestions}
+              />
             </div>
           )}
         </div>

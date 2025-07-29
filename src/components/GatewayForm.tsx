@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { X } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 
 export interface FormData {
   country: string;
@@ -26,6 +27,7 @@ export interface FormData {
 
 interface Props {
   onFormChange: (data: FormData, isComplete: boolean) => void;
+  onDetailedQuestionsToggle: (enabled: boolean) => void;
 }
 
 const countries = [
@@ -62,7 +64,7 @@ const paymentMethods = [
   "Stripe", "Square", "Venmo", "Zelle"
 ];
 
-export default function GatewayForm({ onFormChange }: Props) {
+export default function GatewayForm({ onFormChange, onDetailedQuestionsToggle }: Props) {
   const [formData, setFormData] = useState<FormData>({
     country: "",
     industry: "",
@@ -76,6 +78,7 @@ export default function GatewayForm({ onFormChange }: Props) {
   const [currencySearch, setCurrencySearch] = useState("");
   const [paymentSearch, setPaymentSearch] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showDetailedQuestions, setShowDetailedQuestions] = useState(false);
 
   const isFormComplete = formData.country && formData.industry && formData.annualRevenue;
 
@@ -284,6 +287,25 @@ export default function GatewayForm({ onFormChange }: Props) {
           </Button>
         )}
       </form>
+
+      {/* Detailed Questions Toggle */}
+      {isSubmitted && (
+        <div className="mt-6 pt-6 border-t border-border">
+          <div className="flex items-center space-x-3 p-4 bg-muted/50 rounded-lg">
+            <Switch
+              id="detailed-questions"
+              checked={showDetailedQuestions}
+              onCheckedChange={(checked) => {
+                setShowDetailedQuestions(checked);
+                onDetailedQuestionsToggle(checked);
+              }}
+            />
+            <Label htmlFor="detailed-questions" className="text-sm font-medium cursor-pointer">
+              Answer more detailed questions for more accurate results.
+            </Label>
+          </div>
+        </div>
+      )}
     </Card>
   );
 }
