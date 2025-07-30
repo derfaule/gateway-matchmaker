@@ -18,11 +18,11 @@ export const allCurrencies = [
 ];
 
 export const allPaymentMethods = [
-  "Visa", "MasterCard", "American Express", "Discover", "PayPal", "Apple Pay",
-  "Google Pay", "Bank Transfer", "SEPA Direct Debit", "iDEAL", "Klarna",
-  "Afterpay", "WeChat Pay", "Alipay", "Venmo", "Zelle", "ACH", "Wire Transfer",
-  "BACS", "Faster Payments", "SOFORT", "Giropay", "Bancontact", "EPS",
-  "Przelewy24", "Multibanco", "BLIK", "Trustly", "Paysafecard", "Skrill"
+  "Credit Cards", "PayPal", "Apple Pay", "Google Pay", "Bank Transfer", 
+  "SEPA Direct Debit", "iDEAL", "Klarna", "Afterpay", "WeChat Pay", "Alipay", 
+  "Venmo", "Zelle", "ACH", "Wire Transfer", "BACS", "BECS", "Faster Payments", 
+  "SOFORT", "Giropay", "Bancontact", "EPS", "Przelewy24", "Multibanco", "BLIK", 
+  "Trustly", "Paysafecard", "Skrill", "Carte Bancaire"
 ];
 
 export const gatewayDatabase: PaymentGateway[] = [
@@ -34,7 +34,7 @@ export const gatewayDatabase: PaymentGateway[] = [
     features: ["Global coverage", "Unified commerce", "Advanced fraud protection", "Local payment methods"],
     score: 0,
     supportedCurrencies: ["USD", "EUR", "GBP", "CAD", "AUD", "JPY", "CHF", "SEK", "NOK", "DKK", "SGD", "HKD", "BRL", "MXN", "INR", "CNY", "KRW", "ZAR", "RUB", "PLN", "CZK", "HUF", "THB", "MYR"],
-    supportedPaymentMethods: ["Visa", "MasterCard", "American Express", "Discover", "PayPal", "Apple Pay", "Google Pay", "Bank Transfer", "SEPA Direct Debit", "iDEAL", "Klarna", "Afterpay", "WeChat Pay", "Alipay", "SOFORT", "Giropay", "Bancontact", "EPS", "Przelewy24", "Multibanco"],
+    supportedPaymentMethods: ["Credit Cards", "PayPal", "Apple Pay", "Google Pay", "Bank Transfer", "ACH", "BACS", "SEPA Direct Debit", "iDEAL", "Klarna", "Afterpay", "WeChat Pay", "Alipay", "SOFORT", "Giropay", "Bancontact", "EPS", "Przelewy24", "Multibanco", "Carte Bancaire"],
     technicalDetails: [
       "RESTful API v68 with comprehensive documentation",
       "SDKs available for Java, .NET, Python, PHP, Node.js, iOS, Android",
@@ -56,7 +56,7 @@ export const gatewayDatabase: PaymentGateway[] = [
     features: ["Buyer protection", "Global reach", "Easy integration", "Multiple currencies"],
     score: 0,
     supportedCurrencies: ["USD", "EUR", "GBP", "CAD", "AUD", "JPY", "CHF", "SEK", "NOK", "DKK", "SGD", "HKD", "BRL", "MXN", "INR", "CNY", "KRW", "ZAR", "RUB", "PLN", "CZK", "HUF"],
-    supportedPaymentMethods: ["PayPal", "Visa", "MasterCard", "American Express", "Discover", "Bank Transfer", "Apple Pay", "Google Pay", "Venmo", "PayPal Credit", "SEPA Direct Debit", "SOFORT", "iDEAL", "Bancontact", "Giropay"],
+    supportedPaymentMethods: ["PayPal", "Credit Cards", "Bank Transfer", "Apple Pay", "Google Pay", "Venmo", "PayPal Credit", "ACH", "SEPA Direct Debit", "SOFORT", "iDEAL", "Bancontact", "Giropay"],
     technicalDetails: [
       "REST API v2 with GraphQL endpoints",
       "SDKs for JavaScript, Python, Java, PHP, .NET, Ruby, iOS, Android",
@@ -78,7 +78,7 @@ export const gatewayDatabase: PaymentGateway[] = [
     features: ["Enterprise-grade security", "Global payment processing", "Risk management", "Token management"],
     score: 0,
     supportedCurrencies: ["USD", "EUR", "GBP", "CAD", "AUD", "JPY", "CHF", "SEK", "NOK", "DKK", "SGD", "HKD", "BRL", "MXN", "INR", "CNY", "KRW", "ZAR", "RUB", "PLN", "CZK", "HUF", "THB"],
-    supportedPaymentMethods: ["Visa", "MasterCard", "American Express", "Discover", "PayPal", "Apple Pay", "Google Pay", "Bank Transfer", "ACH", "Wire Transfer", "SEPA Direct Debit", "JCB", "Diners Club", "UnionPay"],
+    supportedPaymentMethods: ["Credit Cards", "PayPal", "Apple Pay", "Google Pay", "Bank Transfer", "ACH", "Wire Transfer", "SEPA Direct Debit"],
     technicalDetails: [
       "REST API and SOAP web services",
       "SDKs for Java, .NET, PHP, Python, Ruby",
@@ -100,7 +100,7 @@ export const gatewayDatabase: PaymentGateway[] = [
     features: ["Developer-friendly APIs", "Global payments", "Subscription billing", "Marketplace payments"],
     score: 0,
     supportedCurrencies: ["USD", "EUR", "GBP", "CAD", "AUD", "JPY", "CHF", "SEK", "NOK", "DKK", "SGD", "HKD", "BRL", "MXN", "INR", "CNY", "KRW", "ZAR", "PLN", "CZK", "HUF", "THB", "MYR"],
-    supportedPaymentMethods: ["Visa", "MasterCard", "American Express", "Discover", "Apple Pay", "Google Pay", "Bank Transfer", "ACH", "SEPA Direct Debit", "iDEAL", "Klarna", "Afterpay", "Alipay", "WeChat Pay", "SOFORT", "Giropay", "Bancontact", "BLIK", "Przelewy24"],
+    supportedPaymentMethods: ["Credit Cards", "Apple Pay", "Google Pay", "Bank Transfer", "ACH", "BACS", "BECS", "SEPA Direct Debit", "iDEAL", "Klarna", "Afterpay", "Alipay", "WeChat Pay", "SOFORT", "Giropay", "Bancontact", "BLIK", "Przelewy24", "Carte Bancaire"],
     technicalDetails: [
       "RESTful API with extensive documentation and examples",
       "Official libraries for Ruby, Python, PHP, Node.js, Java, .NET, Go",
@@ -122,7 +122,7 @@ export const gatewayDatabase: PaymentGateway[] = [
     features: ["Omnichannel payments", "Risk management", "Alternative payments", "Enterprise solutions"],
     score: 0,
     supportedCurrencies: ["USD", "EUR", "GBP", "CAD", "AUD", "JPY", "CHF", "SEK", "NOK", "DKK", "SGD", "HKD", "BRL", "MXN", "INR", "CNY", "KRW", "ZAR", "RUB", "PLN", "CZK", "HUF"],
-    supportedPaymentMethods: ["Visa", "MasterCard", "American Express", "Discover", "PayPal", "Apple Pay", "Google Pay", "Bank Transfer", "SEPA Direct Debit", "iDEAL", "Klarna", "SOFORT", "Giropay", "Bancontact", "UnionPay", "JCB"],
+    supportedPaymentMethods: ["Credit Cards", "PayPal", "Apple Pay", "Google Pay", "Bank Transfer", "SEPA Direct Debit", "iDEAL", "Klarna", "SOFORT", "Giropay", "Bancontact"],
     technicalDetails: [
       "REST API and XML gateway integration",
       "SDKs for major programming languages and platforms",
@@ -144,7 +144,7 @@ export const gatewayDatabase: PaymentGateway[] = [
     features: ["Fraud detection", "Recurring billing", "Customer profiles", "Virtual terminal"],
     score: 0,
     supportedCurrencies: ["USD", "CAD", "EUR", "GBP", "AUD"],
-    supportedPaymentMethods: ["Visa", "MasterCard", "American Express", "Discover", "JCB", "Diners Club", "ACH", "eCheck", "PayPal", "Apple Pay", "Bank Transfer"],
+    supportedPaymentMethods: ["Credit Cards", "ACH", "eCheck", "PayPal", "Apple Pay", "Bank Transfer"],
     technicalDetails: [
       "REST API and legacy AIM/ARB/CIM APIs",
       "SDKs for PHP, .NET, Java, Ruby, Python",
@@ -166,7 +166,7 @@ export const gatewayDatabase: PaymentGateway[] = [
     features: ["In-person payments", "Online payments", "Inventory management", "Analytics"],
     score: 0,
     supportedCurrencies: ["USD", "CAD", "EUR", "GBP", "AUD", "JPY"],
-    supportedPaymentMethods: ["Visa", "MasterCard", "American Express", "Discover", "Apple Pay", "Google Pay", "Cash", "Gift Cards", "ACH", "Bank Transfer"],
+    supportedPaymentMethods: ["Credit Cards", "Apple Pay", "Google Pay", "Cash", "Gift Cards", "ACH", "Bank Transfer"],
     technicalDetails: [
       "REST API with comprehensive endpoint coverage",
       "SDKs for iOS, Android, JavaScript, PHP, Ruby, Python, Java, .NET",
@@ -188,7 +188,7 @@ export const gatewayDatabase: PaymentGateway[] = [
     features: ["Mobile-first", "Global reach", "Marketplace payments", "Subscription billing"],
     score: 0,
     supportedCurrencies: ["USD", "EUR", "GBP", "CAD", "AUD", "JPY", "CHF", "SEK", "NOK", "DKK", "SGD", "HKD", "BRL", "MXN", "THB", "MYR"],
-    supportedPaymentMethods: ["Visa", "MasterCard", "American Express", "Discover", "PayPal", "Apple Pay", "Google Pay", "Venmo", "Bank Transfer", "SEPA Direct Debit", "iDEAL", "SOFORT", "Klarna"],
+    supportedPaymentMethods: ["Credit Cards", "PayPal", "Apple Pay", "Google Pay", "Venmo", "Bank Transfer", "SEPA Direct Debit", "iDEAL", "SOFORT", "Klarna"],
     technicalDetails: [
       "REST API with GraphQL support",
       "Client SDKs for iOS, Android, JavaScript and server SDKs for major languages",
@@ -210,7 +210,7 @@ export const gatewayDatabase: PaymentGateway[] = [
     features: ["US-only gateway", "Enterprise solutions", "Risk management", "Point-of-sale"],
     score: 0,
     supportedCurrencies: ["USD"],
-    supportedPaymentMethods: ["Visa", "MasterCard", "American Express", "Discover", "ACH", "eCheck"],
+    supportedPaymentMethods: ["Credit Cards", "ACH", "eCheck"],
     technicalDetails: [
       "REST API and legacy SOAP services",
       "SDKs for major programming languages",
@@ -228,7 +228,7 @@ export const gatewayDatabase: PaymentGateway[] = [
     features: ["Third-party checkout", "APMs", "Developer-friendly", "Conversion optimization"],
     score: 0,
     supportedCurrencies: ["USD", "EUR", "GBP", "CAD", "AUD", "JPY", "CHF", "SEK", "NOK", "DKK", "SGD", "HKD", "BRL", "MXN", "INR", "CNY", "KRW", "ZAR", "PLN", "CZK", "HUF", "THB", "MYR"],
-    supportedPaymentMethods: ["Visa", "MasterCard", "American Express", "Discover", "Apple Pay", "Google Pay", "Bank Transfer", "ACH", "SEPA Direct Debit", "iDEAL", "Klarna", "Afterpay", "Alipay", "WeChat Pay", "SOFORT", "Giropay", "Bancontact", "BLIK", "Przelewy24"],
+    supportedPaymentMethods: ["Credit Cards", "Apple Pay", "Google Pay", "Bank Transfer", "ACH", "BACS", "BECS", "SEPA Direct Debit", "iDEAL", "Klarna", "Afterpay", "Alipay", "WeChat Pay", "SOFORT", "Giropay", "Bancontact", "BLIK", "Przelewy24", "Carte Bancaire"],
     technicalDetails: [
       "Stripe Elements UI components",
       "Third-party checkout optimization",
@@ -246,7 +246,7 @@ export const gatewayDatabase: PaymentGateway[] = [
     features: ["Emerging markets", "Local payment methods", "UPI", "PIX recurring"],
     score: 0,
     supportedCurrencies: ["USD", "BRL", "MXN", "INR", "ARS", "COP", "PEN", "CLP"],
-    supportedPaymentMethods: ["Visa", "MasterCard", "American Express", "PIX", "UPI", "Mercado Pago", "OXXO", "Boleto"],
+    supportedPaymentMethods: ["Credit Cards", "PIX", "UPI", "Mercado Pago", "OXXO", "Boleto"],
     technicalDetails: [
       "REST API with local market focus",
       "SDKs for major programming languages",
@@ -264,7 +264,7 @@ export const gatewayDatabase: PaymentGateway[] = [
     features: ["Legacy gateway", "Scheduled deprecation", "Enterprise solutions", "US focus"],
     score: 0,
     supportedCurrencies: ["USD", "EUR", "GBP", "CAD"],
-    supportedPaymentMethods: ["Visa", "MasterCard", "American Express", "Discover", "ACH", "Wire Transfer"],
+    supportedPaymentMethods: ["Credit Cards", "ACH", "Wire Transfer"],
     technicalDetails: [
       "Legacy API (deprecation scheduled)",
       "Limited SDK support",
@@ -282,7 +282,7 @@ export const gatewayDatabase: PaymentGateway[] = [
     features: ["US-only processing", "Enterprise solutions", "Card processing", "Merchant services"],
     score: 0,
     supportedCurrencies: ["USD"],
-    supportedPaymentMethods: ["Visa", "MasterCard", "American Express", "Discover", "ACH", "eCheck"],
+    supportedPaymentMethods: ["Credit Cards", "ACH", "eCheck"],
     technicalDetails: [
       "REST API and legacy systems",
       "SDKs for major programming languages",
@@ -300,7 +300,7 @@ export const gatewayDatabase: PaymentGateway[] = [
     features: ["Amazon customer base", "Regional availability", "Easy checkout", "Trusted brand"],
     score: 0,
     supportedCurrencies: ["USD", "EUR", "GBP", "JPY"],
-    supportedPaymentMethods: ["Amazon Pay", "Visa", "MasterCard", "American Express"],
+    supportedPaymentMethods: ["Amazon Pay", "Credit Cards"],
     technicalDetails: [
       "Amazon Pay API v2",
       "SDKs for major programming languages",
@@ -318,7 +318,7 @@ export const gatewayDatabase: PaymentGateway[] = [
     features: ["US and Canada focus", "Payment processing", "Merchant services", "API integration"],
     score: 0,
     supportedCurrencies: ["USD", "CAD"],
-    supportedPaymentMethods: ["Visa", "MasterCard", "American Express", "Discover", "ACH", "eCheck"],
+    supportedPaymentMethods: ["Credit Cards", "ACH", "eCheck"],
     technicalDetails: [
       "REST API with comprehensive documentation",
       "SDKs for major programming languages",
@@ -336,7 +336,7 @@ export const gatewayDatabase: PaymentGateway[] = [
     features: ["Full-service platform", "Payment management", "Enterprise solutions", "Global processing"],
     score: 0,
     supportedCurrencies: ["USD", "EUR", "GBP", "CAD", "AUD", "JPY", "CHF"],
-    supportedPaymentMethods: ["Visa", "MasterCard", "American Express", "Discover", "PayPal", "Apple Pay", "Google Pay", "ACH"],
+    supportedPaymentMethods: ["Credit Cards", "PayPal", "Apple Pay", "Google Pay", "ACH"],
     technicalDetails: [
       "Comprehensive API suite",
       "SDKs for major programming languages",
@@ -354,7 +354,7 @@ export const gatewayDatabase: PaymentGateway[] = [
     features: ["Direct debit specialist", "SMB focus", "ACH alternative", "SEPA payments"],
     score: 0,
     supportedCurrencies: ["USD", "EUR", "GBP", "CAD", "AUD", "SEK", "DKK", "NOK"],
-    supportedPaymentMethods: ["ACH", "BACS", "BECS", "SEPA Direct Debit", "Bank Transfer"],
+    supportedPaymentMethods: ["ACH", "BACS", "BECS", "SEPA Direct Debit", "iDEAL", "Bank Transfer"],
     technicalDetails: [
       "REST API focused on direct debit",
       "SDKs for major programming languages",
@@ -372,7 +372,7 @@ export const gatewayDatabase: PaymentGateway[] = [
     features: ["POS specialist", "Omnichannel", "Card present", "Retail focus"],
     score: 0,
     supportedCurrencies: ["USD", "EUR", "GBP", "CAD"],
-    supportedPaymentMethods: ["Visa", "MasterCard", "American Express", "Discover", "Apple Pay", "Google Pay", "Contactless"],
+    supportedPaymentMethods: ["Credit Cards", "Apple Pay", "Google Pay", "Contactless"],
     technicalDetails: [
       "POS-focused API",
       "Omnichannel payment orchestration",
