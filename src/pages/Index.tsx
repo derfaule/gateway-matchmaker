@@ -1,7 +1,6 @@
 import { useState } from "react";
 import GatewayForm, { FormData } from "@/components/GatewayForm";
 import GatewayResults from "@/components/GatewayResults";
-
 const Index = () => {
   const [formData, setFormData] = useState<FormData>({
     country: "",
@@ -14,18 +13,14 @@ const Index = () => {
   });
   const [showResults, setShowResults] = useState(false);
   const [showDetailedQuestions, setShowDetailedQuestions] = useState(false);
-
   const handleFormChange = (data: FormData, isComplete: boolean) => {
     setFormData(data);
     setShowResults(isComplete);
   };
-
   const handleDetailedQuestionsToggle = (enabled: boolean) => {
     setShowDetailedQuestions(enabled);
   };
-
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       {/* Header Section */}
       <div className="bg-gradient-to-r from-yellow-brand to-yellow-brand/90 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -37,51 +32,26 @@ const Index = () => {
               Recurly works with multiple payment gateways globally. Use our tool to quickly 
               compare costs and find the best gateway for your business.
             </p>
-            <button 
-              onClick={() => document.getElementById('business-form')?.scrollIntoView({ behavior: 'smooth' })}
-              className="bg-yellow-brand-foreground text-yellow-brand px-6 py-3 rounded-lg font-semibold hover:bg-yellow-brand-foreground/90 transition-colors"
-            >
-              Compare Gateways Now
-            </button>
+            
           </div>
         </div>
       </div>
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className={`transition-all duration-500 ease-in-out ${
-          showResults 
-            ? 'grid grid-cols-1 lg:grid-cols-2 gap-8' 
-            : 'flex justify-center'
-        }`}>
+        <div className={`transition-all duration-500 ease-in-out ${showResults ? 'grid grid-cols-1 lg:grid-cols-2 gap-8' : 'flex justify-center'}`}>
           {/* Form Section */}
-          <div 
-            id="business-form"
-            className={`transition-all duration-500 ease-in-out ${
-              showResults ? 'w-full' : 'w-full max-w-2xl'
-            }`}
-          >
+          <div id="business-form" className={`transition-all duration-500 ease-in-out ${showResults ? 'w-full' : 'w-full max-w-2xl'}`}>
             <h2 className="text-2xl font-semibold mb-6">Tell us about your business</h2>
-            <GatewayForm 
-              onFormChange={handleFormChange} 
-              onDetailedQuestionsToggle={handleDetailedQuestionsToggle}
-            />
+            <GatewayForm onFormChange={handleFormChange} onDetailedQuestionsToggle={handleDetailedQuestionsToggle} />
           </div>
 
           {/* Results Section */}
-          {showResults && (
-            <div className="transition-all duration-500 ease-in-out">
-              <GatewayResults 
-                formData={formData} 
-                showResults={showResults} 
-                showDetailedQuestions={showDetailedQuestions}
-              />
-            </div>
-          )}
+          {showResults && <div className="transition-all duration-500 ease-in-out">
+              <GatewayResults formData={formData} showResults={showResults} showDetailedQuestions={showDetailedQuestions} />
+            </div>}
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;

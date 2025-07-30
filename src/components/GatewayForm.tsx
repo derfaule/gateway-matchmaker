@@ -7,7 +7,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { X } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
-
 export interface FormData {
   country: string;
   industry: string;
@@ -24,47 +23,19 @@ export interface FormData {
   merchantOfRecord?: boolean;
   fraudDetectionRequired?: boolean;
 }
-
 interface Props {
   onFormChange: (data: FormData, isComplete: boolean) => void;
   onDetailedQuestionsToggle: (enabled: boolean) => void;
 }
-
-const countries = [
-  "United States", "United Kingdom", "Canada", "Germany", "France", "Australia",
-  "Netherlands", "Sweden", "Norway", "Denmark", "Switzerland", "Belgium",
-  "Austria", "Ireland", "Finland", "Spain", "Italy", "Portugal", "Japan",
-  "Singapore", "New Zealand", "Brazil", "Mexico", "India", "China"
-];
-
-const industries = [
-  "Construction", "Retail", "Software", "Financial Services", "Healthcare",
-  "Education", "Entertainment", "Manufacturing", "Professional Services",
-  "Real Estate", "Travel & Hospitality", "Food & Beverage", "Automotive",
-  "Technology", "Consulting", "Media & Publishing", "Non-profit"
-];
-
-const revenueRanges = [
-  "0-20 M", "20-50 M", "50-200 M", "200+M"
-];
-
-const currencies = [
-  "United States Dollar (USD)", "Euro (EUR)", "British Pound (GBP)",
-  "Canadian Dollar (CAD)", "Australian Dollar (AUD)", "Japanese Yen (JPY)",
-  "Swiss Franc (CHF)", "Swedish Krona (SEK)", "Norwegian Krone (NOK)",
-  "Danish Krone (DKK)", "Singapore Dollar (SGD)", "Hong Kong Dollar (HKD)",
-  "Brazilian Real (BRL)", "Mexican Peso (MXN)", "Indian Rupee (INR)",
-  "Chinese Yuan (CNY)"
-];
-
-const paymentMethods = [
-  "Visa", "MasterCard", "American Express", "Discover", "PayPal",
-  "Apple Pay", "Google Pay", "Bank Transfer", "SEPA Direct Debit",
-  "iDEAL", "Klarna", "Afterpay", "WeChat Pay", "Alipay",
-  "Stripe", "Square", "Venmo", "Zelle"
-];
-
-export default function GatewayForm({ onFormChange, onDetailedQuestionsToggle }: Props) {
+const countries = ["United States", "United Kingdom", "Canada", "Germany", "France", "Australia", "Netherlands", "Sweden", "Norway", "Denmark", "Switzerland", "Belgium", "Austria", "Ireland", "Finland", "Spain", "Italy", "Portugal", "Japan", "Singapore", "New Zealand", "Brazil", "Mexico", "India", "China"];
+const industries = ["Construction", "Retail", "Software", "Financial Services", "Healthcare", "Education", "Entertainment", "Manufacturing", "Professional Services", "Real Estate", "Travel & Hospitality", "Food & Beverage", "Automotive", "Technology", "Consulting", "Media & Publishing", "Non-profit"];
+const revenueRanges = ["0-20 M", "20-50 M", "50-200 M", "200+M"];
+const currencies = ["United States Dollar (USD)", "Euro (EUR)", "British Pound (GBP)", "Canadian Dollar (CAD)", "Australian Dollar (AUD)", "Japanese Yen (JPY)", "Swiss Franc (CHF)", "Swedish Krona (SEK)", "Norwegian Krone (NOK)", "Danish Krone (DKK)", "Singapore Dollar (SGD)", "Hong Kong Dollar (HKD)", "Brazilian Real (BRL)", "Mexican Peso (MXN)", "Indian Rupee (INR)", "Chinese Yuan (CNY)"];
+const paymentMethods = ["Visa", "MasterCard", "American Express", "Discover", "PayPal", "Apple Pay", "Google Pay", "Bank Transfer", "SEPA Direct Debit", "iDEAL", "Klarna", "Afterpay", "WeChat Pay", "Alipay", "Stripe", "Square", "Venmo", "Zelle"];
+export default function GatewayForm({
+  onFormChange,
+  onDetailedQuestionsToggle
+}: Props) {
   const [formData, setFormData] = useState<FormData>({
     country: "",
     industry: "",
@@ -74,7 +45,6 @@ export default function GatewayForm({ onFormChange, onDetailedQuestionsToggle }:
     currencies: [],
     paymentMethods: []
   });
-
   const [currencySearch, setCurrencySearch] = useState("");
   const [paymentSearch, setPaymentSearch] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -82,173 +52,123 @@ export default function GatewayForm({ onFormChange, onDetailedQuestionsToggle }:
   const [detailedData, setDetailedData] = useState<Partial<FormData>>({});
   const [marketSearch, setMarketSearch] = useState("");
   const [targetMarketSearch, setTargetMarketSearch] = useState("");
-
   const isFormComplete = formData.country && formData.industry && formData.annualRevenue;
-
-  const markets = [
-    "United States", "United Kingdom", "Canada", "Germany", "France", "Australia",
-    "Netherlands", "Sweden", "Norway", "Denmark", "Switzerland", "Belgium",
-    "Austria", "Ireland", "Finland", "Spain", "Italy", "Portugal", "Japan",
-    "Singapore", "New Zealand", "Brazil", "Mexico", "India", "China", "South Korea",
-    "EMEA", "LATAM", "APAC", "NA"
-  ];
-
+  const markets = ["United States", "United Kingdom", "Canada", "Germany", "France", "Australia", "Netherlands", "Sweden", "Norway", "Denmark", "Switzerland", "Belgium", "Austria", "Ireland", "Finland", "Spain", "Italy", "Portugal", "Japan", "Singapore", "New Zealand", "Brazil", "Mexico", "India", "China", "South Korea", "EMEA", "LATAM", "APAC", "NA"];
   useEffect(() => {
     onFormChange(formData, isFormComplete && isSubmitted);
   }, [formData, isFormComplete, isSubmitted, onFormChange]);
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormComplete) {
       setIsSubmitted(true);
     }
   };
-
   const updateFormData = (updates: Partial<FormData>) => {
-    setFormData(prev => ({ ...prev, ...updates }));
+    setFormData(prev => ({
+      ...prev,
+      ...updates
+    }));
   };
-
   const addCurrency = (currency: string) => {
     if (!formData.currencies.includes(currency)) {
-      updateFormData({ currencies: [...formData.currencies, currency] });
+      updateFormData({
+        currencies: [...formData.currencies, currency]
+      });
     }
     setCurrencySearch("");
   };
-
   const removeCurrency = (currency: string) => {
-    updateFormData({ 
-      currencies: formData.currencies.filter(c => c !== currency) 
+    updateFormData({
+      currencies: formData.currencies.filter(c => c !== currency)
     });
   };
-
   const addPaymentMethod = (method: string) => {
     if (!formData.paymentMethods.includes(method)) {
-      updateFormData({ paymentMethods: [...formData.paymentMethods, method] });
+      updateFormData({
+        paymentMethods: [...formData.paymentMethods, method]
+      });
     }
     setPaymentSearch("");
   };
-
   const removePaymentMethod = (method: string) => {
-    updateFormData({ 
-      paymentMethods: formData.paymentMethods.filter(m => m !== method) 
+    updateFormData({
+      paymentMethods: formData.paymentMethods.filter(m => m !== method)
     });
   };
-
-  const filteredCurrencies = currencies.filter(currency =>
-    currency.toLowerCase().includes(currencySearch.toLowerCase())
-  );
-
-  const filteredPaymentMethods = paymentMethods.filter(method =>
-    method.toLowerCase().includes(paymentSearch.toLowerCase())
-  );
-
-  return (
-    <Card className="p-6 space-y-6">
+  const filteredCurrencies = currencies.filter(currency => currency.toLowerCase().includes(currencySearch.toLowerCase()));
+  const filteredPaymentMethods = paymentMethods.filter(method => method.toLowerCase().includes(paymentSearch.toLowerCase()));
+  return <Card className="p-6 space-y-6">
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
           <Label htmlFor="country">Corporate headquarters country</Label>
-          <Select 
-            value={formData.country} 
-            onValueChange={(value) => updateFormData({ country: value })}
-          >
+          <Select value={formData.country} onValueChange={value => updateFormData({
+          country: value
+        })}>
             <SelectTrigger>
               <SelectValue placeholder="Select a country" />
             </SelectTrigger>
             <SelectContent className="bg-popover border border-border max-h-60 overflow-y-auto">
-              {countries.map(country => (
-                <SelectItem key={country} value={country}>{country}</SelectItem>
-              ))}
+              {countries.map(country => <SelectItem key={country} value={country}>{country}</SelectItem>)}
             </SelectContent>
           </Select>
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="industry">Industry</Label>
-          <Select 
-            value={formData.industry} 
-            onValueChange={(value) => updateFormData({ industry: value })}
-          >
+          <Select value={formData.industry} onValueChange={value => updateFormData({
+          industry: value
+        })}>
             <SelectTrigger>
               <SelectValue placeholder="Select your industry" />
             </SelectTrigger>
             <SelectContent className="bg-popover border border-border max-h-60 overflow-y-auto">
-              {industries.map(industry => (
-                <SelectItem key={industry} value={industry}>{industry}</SelectItem>
-              ))}
+              {industries.map(industry => <SelectItem key={industry} value={industry}>{industry}</SelectItem>)}
             </SelectContent>
           </Select>
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="revenue">Annual Revenue</Label>
-          <Select 
-            value={formData.annualRevenue} 
-            onValueChange={(value) => updateFormData({ annualRevenue: value })}
-          >
+          <Select value={formData.annualRevenue} onValueChange={value => updateFormData({
+          annualRevenue: value
+        })}>
             <SelectTrigger>
               <SelectValue placeholder="Select a range" />
             </SelectTrigger>
             <SelectContent className="bg-popover border border-border">
-              {revenueRanges.map(range => (
-                <SelectItem key={range} value={range}>{range}</SelectItem>
-              ))}
+              {revenueRanges.map(range => <SelectItem key={range} value={range}>{range}</SelectItem>)}
             </SelectContent>
           </Select>
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="subscription-amount">Average Subscription Amount</Label>
-          <Input
-            id="subscription-amount"
-            type="number"
-            placeholder="0"
-            value={formData.avgSubscriptionAmount || ""}
-            onChange={(e) => updateFormData({ avgSubscriptionAmount: Number(e.target.value) })}
-          />
+          <Input id="subscription-amount" type="number" placeholder="0" value={formData.avgSubscriptionAmount || ""} onChange={e => updateFormData({
+          avgSubscriptionAmount: Number(e.target.value)
+        })} />
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="subscriptions-count">Average # of subscriptions a month</Label>
-          <Input
-            id="subscriptions-count"
-            type="number"
-            placeholder="0"
-            value={formData.avgSubscriptionsPerMonth || ""}
-            onChange={(e) => updateFormData({ avgSubscriptionsPerMonth: Number(e.target.value) })}
-          />
+          <Input id="subscriptions-count" type="number" placeholder="0" value={formData.avgSubscriptionsPerMonth || ""} onChange={e => updateFormData({
+          avgSubscriptionsPerMonth: Number(e.target.value)
+        })} />
         </div>
 
         <div className="space-y-2">
           <Label>Accepted Currencies</Label>
           <div className="space-y-2">
-            <Input
-              placeholder="Search a currency"
-              value={currencySearch}
-              onChange={(e) => setCurrencySearch(e.target.value)}
-            />
-            {currencySearch && filteredCurrencies.length > 0 && (
-              <div className="border border-border rounded-md bg-popover max-h-40 overflow-y-auto">
-                {filteredCurrencies.slice(0, 5).map(currency => (
-                  <div
-                    key={currency}
-                    className="px-3 py-2 hover:bg-accent cursor-pointer"
-                    onClick={() => addCurrency(currency)}
-                  >
+            <Input placeholder="Search a currency" value={currencySearch} onChange={e => setCurrencySearch(e.target.value)} />
+            {currencySearch && filteredCurrencies.length > 0 && <div className="border border-border rounded-md bg-popover max-h-40 overflow-y-auto">
+                {filteredCurrencies.slice(0, 5).map(currency => <div key={currency} className="px-3 py-2 hover:bg-accent cursor-pointer" onClick={() => addCurrency(currency)}>
                     {currency}
-                  </div>
-                ))}
-              </div>
-            )}
+                  </div>)}
+              </div>}
             <div className="flex flex-wrap gap-2">
-              {formData.currencies.map(currency => (
-                <Badge key={currency} variant="secondary" className="pr-1">
+              {formData.currencies.map(currency => <Badge key={currency} variant="secondary" className="pr-1">
                   {currency}
-                  <X 
-                    className="w-3 h-3 ml-1 cursor-pointer" 
-                    onClick={() => removeCurrency(currency)}
-                  />
-                </Badge>
-              ))}
+                  <X className="w-3 h-3 ml-1 cursor-pointer" onClick={() => removeCurrency(currency)} />
+                </Badge>)}
             </div>
           </div>
         </div>
@@ -256,69 +176,38 @@ export default function GatewayForm({ onFormChange, onDetailedQuestionsToggle }:
         <div className="space-y-2">
           <Label>Payment methods</Label>
           <div className="space-y-2">
-            <Input
-              placeholder="Search payment methods"
-              value={paymentSearch}
-              onChange={(e) => setPaymentSearch(e.target.value)}
-            />
-            {paymentSearch && filteredPaymentMethods.length > 0 && (
-              <div className="border border-border rounded-md bg-popover max-h-40 overflow-y-auto">
-                {filteredPaymentMethods.slice(0, 5).map(method => (
-                  <div
-                    key={method}
-                    className="px-3 py-2 hover:bg-accent cursor-pointer"
-                    onClick={() => addPaymentMethod(method)}
-                  >
+            <Input placeholder="Search payment methods" value={paymentSearch} onChange={e => setPaymentSearch(e.target.value)} />
+            {paymentSearch && filteredPaymentMethods.length > 0 && <div className="border border-border rounded-md bg-popover max-h-40 overflow-y-auto">
+                {filteredPaymentMethods.slice(0, 5).map(method => <div key={method} className="px-3 py-2 hover:bg-accent cursor-pointer" onClick={() => addPaymentMethod(method)}>
                     {method}
-                  </div>
-                ))}
-              </div>
-            )}
+                  </div>)}
+              </div>}
             <div className="flex flex-wrap gap-2">
-              {formData.paymentMethods.map(method => (
-                <Badge key={method} variant="secondary" className="pr-1">
+              {formData.paymentMethods.map(method => <Badge key={method} variant="secondary" className="pr-1">
                   {method}
-                  <X 
-                    className="w-3 h-3 ml-1 cursor-pointer" 
-                    onClick={() => removePaymentMethod(method)}
-                  />
-                </Badge>
-              ))}
+                  <X className="w-3 h-3 ml-1 cursor-pointer" onClick={() => removePaymentMethod(method)} />
+                </Badge>)}
             </div>
           </div>
         </div>
 
-        {!isSubmitted && (
-          <Button 
-            type="submit" 
-            className="w-full"
-            disabled={!isFormComplete}
-          >
-            Find Payment Gateways
-          </Button>
-        )}
+        {!isSubmitted && <Button type="submit" className="w-full" disabled={!isFormComplete}>Compare Payment Gateways</Button>}
       </form>
 
       {/* Detailed Questions Toggle */}
-      {isSubmitted && (
-        <div className="mt-6 pt-6 border-t border-border">
+      {isSubmitted && <div className="mt-6 pt-6 border-t border-border">
           <div className="flex items-center space-x-3 p-4 bg-muted/50 rounded-lg">
-            <Switch
-              id="detailed-questions"
-              checked={showDetailedQuestions}
-              onCheckedChange={(checked) => {
-                setShowDetailedQuestions(checked);
-                onDetailedQuestionsToggle(checked);
-              }}
-            />
+            <Switch id="detailed-questions" checked={showDetailedQuestions} onCheckedChange={checked => {
+          setShowDetailedQuestions(checked);
+          onDetailedQuestionsToggle(checked);
+        }} />
             <Label htmlFor="detailed-questions" className="text-sm font-medium cursor-pointer">
               Answer more detailed questions for more accurate results.
             </Label>
           </div>
 
           {/* Detailed Questions Section */}
-          {showDetailedQuestions && (
-            <Card className="mt-4 p-6 space-y-6 bg-accent/5 border-accent/20">
+          {showDetailedQuestions && <Card className="mt-4 p-6 space-y-6 bg-accent/5 border-accent/20">
               <div className="flex items-center justify-between">
                 <h4 className="text-lg font-semibold">Optional Details</h4>
               </div>
@@ -330,16 +219,10 @@ export default function GatewayForm({ onFormChange, onDetailedQuestionsToggle }:
                     Projected Growth Rate <span className="text-muted-foreground">(Optional)</span>
                   </Label>
                   <div className="relative">
-                    <Input
-                      id="growth-rate"
-                      type="number"
-                      placeholder="0"
-                      value={detailedData.projectedGrowthRate || ""}
-                      onChange={(e) => setDetailedData(prev => ({ 
-                        ...prev, 
-                        projectedGrowthRate: Number(e.target.value) 
-                      }))}
-                    />
+                    <Input id="growth-rate" type="number" placeholder="0" value={detailedData.projectedGrowthRate || ""} onChange={e => setDetailedData(prev => ({
+                ...prev,
+                projectedGrowthRate: Number(e.target.value)
+              }))} />
                     <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">%</span>
                   </div>
                 </div>
@@ -351,25 +234,17 @@ export default function GatewayForm({ onFormChange, onDetailedQuestionsToggle }:
                   </Label>
                   <div className="flex items-center space-x-4">
                     <div className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        id="acquiring-yes"
-                        name="localAcquiring"
-                        checked={detailedData.localAcquiringNeeded === true}
-                        onChange={() => setDetailedData(prev => ({ ...prev, localAcquiringNeeded: true }))}
-                        className="w-4 h-4"
-                      />
+                      <input type="radio" id="acquiring-yes" name="localAcquiring" checked={detailedData.localAcquiringNeeded === true} onChange={() => setDetailedData(prev => ({
+                  ...prev,
+                  localAcquiringNeeded: true
+                }))} className="w-4 h-4" />
                       <Label htmlFor="acquiring-yes" className="text-sm">Yes</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        id="acquiring-no"
-                        name="localAcquiring"
-                        checked={detailedData.localAcquiringNeeded === false}
-                        onChange={() => setDetailedData(prev => ({ ...prev, localAcquiringNeeded: false }))}
-                        className="w-4 h-4"
-                      />
+                      <input type="radio" id="acquiring-no" name="localAcquiring" checked={detailedData.localAcquiringNeeded === false} onChange={() => setDetailedData(prev => ({
+                  ...prev,
+                  localAcquiringNeeded: false
+                }))} className="w-4 h-4" />
                       <Label htmlFor="acquiring-no" className="text-sm">No</Label>
                     </div>
                   </div>
@@ -381,51 +256,31 @@ export default function GatewayForm({ onFormChange, onDetailedQuestionsToggle }:
                     Which markets generate your top 80% of revenue today? <span className="text-muted-foreground">(Optional)</span>
                   </Label>
                   <div className="space-y-2">
-                    <Input
-                      placeholder="Search markets..."
-                      value={marketSearch}
-                      onChange={(e) => setMarketSearch(e.target.value)}
-                    />
-                    {marketSearch && (
-                      <div className="border border-border rounded-md bg-popover max-h-40 overflow-y-auto">
-                        {markets
-                          .filter(market => market.toLowerCase().includes(marketSearch.toLowerCase()))
-                          .slice(0, 5)
-                          .map(market => (
-                            <div
-                              key={market}
-                              className="px-3 py-2 hover:bg-accent cursor-pointer"
-                              onClick={() => {
-                                const currentMarkets = detailedData.top80RevenueMarkets || [];
-                                if (!currentMarkets.includes(market)) {
-                                  setDetailedData(prev => ({
-                                    ...prev,
-                                    top80RevenueMarkets: [...currentMarkets, market]
-                                  }));
-                                }
-                                setMarketSearch("");
-                              }}
-                            >
+                    <Input placeholder="Search markets..." value={marketSearch} onChange={e => setMarketSearch(e.target.value)} />
+                    {marketSearch && <div className="border border-border rounded-md bg-popover max-h-40 overflow-y-auto">
+                        {markets.filter(market => market.toLowerCase().includes(marketSearch.toLowerCase())).slice(0, 5).map(market => <div key={market} className="px-3 py-2 hover:bg-accent cursor-pointer" onClick={() => {
+                  const currentMarkets = detailedData.top80RevenueMarkets || [];
+                  if (!currentMarkets.includes(market)) {
+                    setDetailedData(prev => ({
+                      ...prev,
+                      top80RevenueMarkets: [...currentMarkets, market]
+                    }));
+                  }
+                  setMarketSearch("");
+                }}>
                               {market}
-                            </div>
-                          ))}
-                      </div>
-                    )}
+                            </div>)}
+                      </div>}
                     <div className="flex flex-wrap gap-2">
-                      {(detailedData.top80RevenueMarkets || []).map(market => (
-                        <Badge key={market} variant="secondary" className="pr-1">
+                      {(detailedData.top80RevenueMarkets || []).map(market => <Badge key={market} variant="secondary" className="pr-1">
                           {market}
-                          <X 
-                            className="w-3 h-3 ml-1 cursor-pointer" 
-                            onClick={() => {
-                              setDetailedData(prev => ({
-                                ...prev,
-                                top80RevenueMarkets: (prev.top80RevenueMarkets || []).filter(m => m !== market)
-                              }));
-                            }}
-                          />
-                        </Badge>
-                      ))}
+                          <X className="w-3 h-3 ml-1 cursor-pointer" onClick={() => {
+                    setDetailedData(prev => ({
+                      ...prev,
+                      top80RevenueMarkets: (prev.top80RevenueMarkets || []).filter(m => m !== market)
+                    }));
+                  }} />
+                        </Badge>)}
                     </div>
                   </div>
                 </div>
@@ -436,51 +291,31 @@ export default function GatewayForm({ onFormChange, onDetailedQuestionsToggle }:
                     Which markets are you targeting next? <span className="text-muted-foreground">(Optional)</span>
                   </Label>
                   <div className="space-y-2">
-                    <Input
-                      placeholder="Search target markets..."
-                      value={targetMarketSearch}
-                      onChange={(e) => setTargetMarketSearch(e.target.value)}
-                    />
-                    {targetMarketSearch && (
-                      <div className="border border-border rounded-md bg-popover max-h-40 overflow-y-auto">
-                        {markets
-                          .filter(market => market.toLowerCase().includes(targetMarketSearch.toLowerCase()))
-                          .slice(0, 5)
-                          .map(market => (
-                            <div
-                              key={market}
-                              className="px-3 py-2 hover:bg-accent cursor-pointer"
-                              onClick={() => {
-                                const currentTargets = detailedData.targetMarkets || [];
-                                if (!currentTargets.includes(market)) {
-                                  setDetailedData(prev => ({
-                                    ...prev,
-                                    targetMarkets: [...currentTargets, market]
-                                  }));
-                                }
-                                setTargetMarketSearch("");
-                              }}
-                            >
+                    <Input placeholder="Search target markets..." value={targetMarketSearch} onChange={e => setTargetMarketSearch(e.target.value)} />
+                    {targetMarketSearch && <div className="border border-border rounded-md bg-popover max-h-40 overflow-y-auto">
+                        {markets.filter(market => market.toLowerCase().includes(targetMarketSearch.toLowerCase())).slice(0, 5).map(market => <div key={market} className="px-3 py-2 hover:bg-accent cursor-pointer" onClick={() => {
+                  const currentTargets = detailedData.targetMarkets || [];
+                  if (!currentTargets.includes(market)) {
+                    setDetailedData(prev => ({
+                      ...prev,
+                      targetMarkets: [...currentTargets, market]
+                    }));
+                  }
+                  setTargetMarketSearch("");
+                }}>
                               {market}
-                            </div>
-                          ))}
-                      </div>
-                    )}
+                            </div>)}
+                      </div>}
                     <div className="flex flex-wrap gap-2">
-                      {(detailedData.targetMarkets || []).map(market => (
-                        <Badge key={market} variant="secondary" className="pr-1">
+                      {(detailedData.targetMarkets || []).map(market => <Badge key={market} variant="secondary" className="pr-1">
                           {market}
-                          <X 
-                            className="w-3 h-3 ml-1 cursor-pointer" 
-                            onClick={() => {
-                              setDetailedData(prev => ({
-                                ...prev,
-                                targetMarkets: (prev.targetMarkets || []).filter(m => m !== market)
-                              }));
-                            }}
-                          />
-                        </Badge>
-                      ))}
+                          <X className="w-3 h-3 ml-1 cursor-pointer" onClick={() => {
+                    setDetailedData(prev => ({
+                      ...prev,
+                      targetMarkets: (prev.targetMarkets || []).filter(m => m !== market)
+                    }));
+                  }} />
+                        </Badge>)}
                     </div>
                   </div>
                 </div>
@@ -492,25 +327,17 @@ export default function GatewayForm({ onFormChange, onDetailedQuestionsToggle }:
                   </Label>
                   <div className="flex items-center space-x-4">
                     <div className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        id="merchant-yes"
-                        name="merchantOfRecord"
-                        checked={detailedData.merchantOfRecord === true}
-                        onChange={() => setDetailedData(prev => ({ ...prev, merchantOfRecord: true }))}
-                        className="w-4 h-4"
-                      />
+                      <input type="radio" id="merchant-yes" name="merchantOfRecord" checked={detailedData.merchantOfRecord === true} onChange={() => setDetailedData(prev => ({
+                  ...prev,
+                  merchantOfRecord: true
+                }))} className="w-4 h-4" />
                       <Label htmlFor="merchant-yes" className="text-sm">Yes</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        id="merchant-no"
-                        name="merchantOfRecord"
-                        checked={detailedData.merchantOfRecord === false}
-                        onChange={() => setDetailedData(prev => ({ ...prev, merchantOfRecord: false }))}
-                        className="w-4 h-4"
-                      />
+                      <input type="radio" id="merchant-no" name="merchantOfRecord" checked={detailedData.merchantOfRecord === false} onChange={() => setDetailedData(prev => ({
+                  ...prev,
+                  merchantOfRecord: false
+                }))} className="w-4 h-4" />
                       <Label htmlFor="merchant-no" className="text-sm">No</Label>
                     </div>
                   </div>
@@ -523,34 +350,23 @@ export default function GatewayForm({ onFormChange, onDetailedQuestionsToggle }:
                   </Label>
                   <div className="flex items-center space-x-4">
                     <div className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        id="fraud-yes"
-                        name="fraudDetection"
-                        checked={detailedData.fraudDetectionRequired === true}
-                        onChange={() => setDetailedData(prev => ({ ...prev, fraudDetectionRequired: true }))}
-                        className="w-4 h-4"
-                      />
+                      <input type="radio" id="fraud-yes" name="fraudDetection" checked={detailedData.fraudDetectionRequired === true} onChange={() => setDetailedData(prev => ({
+                  ...prev,
+                  fraudDetectionRequired: true
+                }))} className="w-4 h-4" />
                       <Label htmlFor="fraud-yes" className="text-sm">Yes</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        id="fraud-no"
-                        name="fraudDetection"
-                        checked={detailedData.fraudDetectionRequired === false}
-                        onChange={() => setDetailedData(prev => ({ ...prev, fraudDetectionRequired: false }))}
-                        className="w-4 h-4"
-                      />
+                      <input type="radio" id="fraud-no" name="fraudDetection" checked={detailedData.fraudDetectionRequired === false} onChange={() => setDetailedData(prev => ({
+                  ...prev,
+                  fraudDetectionRequired: false
+                }))} className="w-4 h-4" />
                       <Label htmlFor="fraud-no" className="text-sm">No</Label>
                     </div>
                   </div>
                 </div>
               </div>
-            </Card>
-          )}
-        </div>
-      )}
-    </Card>
-  );
+            </Card>}
+        </div>}
+    </Card>;
 }
