@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { X } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import { allPaymentMethods } from "@/lib/gatewayData";
 export interface FormData {
   country: string;
   industry: string;
@@ -31,7 +32,7 @@ const countries = ["United States", "United Kingdom", "Canada", "Germany", "Fran
 const industries = ["Construction", "Retail", "Software", "Financial Services", "Healthcare", "Education", "Entertainment", "Manufacturing", "Professional Services", "Real Estate", "Travel & Hospitality", "Food & Beverage", "Automotive", "Technology", "Consulting", "Media & Publishing", "Non-profit"];
 const revenueRanges = ["0-20 M", "20-50 M", "50-200 M", "200+M"];
 const currencies = ["United States Dollar (USD)", "Euro (EUR)", "British Pound (GBP)", "Canadian Dollar (CAD)", "Australian Dollar (AUD)", "Japanese Yen (JPY)", "Swiss Franc (CHF)", "Swedish Krona (SEK)", "Norwegian Krone (NOK)", "Danish Krone (DKK)", "Singapore Dollar (SGD)", "Hong Kong Dollar (HKD)", "Brazilian Real (BRL)", "Mexican Peso (MXN)", "Indian Rupee (INR)", "Chinese Yuan (CNY)"];
-const paymentMethods = ["Visa", "MasterCard", "American Express", "Discover", "PayPal", "Apple Pay", "Google Pay", "Bank Transfer", "SEPA Direct Debit", "iDEAL", "Klarna", "Afterpay", "WeChat Pay", "Alipay", "Stripe", "Square", "Venmo", "Zelle"];
+
 export default function GatewayForm({
   onFormChange,
   onDetailedQuestionsToggle
@@ -96,7 +97,7 @@ export default function GatewayForm({
     });
   };
   const filteredCurrencies = currencies.filter(currency => currency.toLowerCase().includes(currencySearch.toLowerCase()));
-  const filteredPaymentMethods = paymentMethods.filter(method => method.toLowerCase().includes(paymentSearch.toLowerCase()));
+  const filteredPaymentMethods = allPaymentMethods.filter(method => method.toLowerCase().includes(paymentSearch.toLowerCase()));
   return <Card className="p-6 space-y-6">
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
