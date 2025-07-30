@@ -10,6 +10,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { X, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 interface Props {
   formData: FormData;
@@ -136,28 +143,43 @@ export default function GatewayResults({ formData, showResults, showDetailedQues
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">Recommended Payment Gateways</h3>
-        <span className="text-sm text-muted-foreground">
+        <h2 className="text-2xl font-semibold">Recommended Gateways</h2>
+        <div className="text-sm text-muted-foreground">
           {filteredGateways.length} results found
-        </span>
+        </div>
       </div>
-      
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-1">
-        {filteredGateways.map((gateway) => (
-          <GatewayCard key={gateway.id} gateway={gateway} formData={formData} />
-        ))}
-      </div>
-      
-      {filteredGateways.length === 0 && (
-        <div className="text-center py-8 text-muted-foreground">
+
+      {filteredGateways.length > 0 ? (
+        <Carousel
+          opts={{
+            align: "start",
+            loop: false,
+            slidesToScroll: 1,
+          }}
+          className="w-full"
+        >
+          <CarouselContent className="-ml-2 md:-ml-4">
+            {filteredGateways.map((gateway) => (
+              <CarouselItem key={gateway.id} className="pl-2 md:pl-4 md:basis-1/2">
+                <GatewayCard 
+                  gateway={gateway} 
+                  formData={formData}
+                />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="left-0 bg-background/80 backdrop-blur-sm border shadow-lg hover:bg-background" />
+          <CarouselNext className="right-0 bg-background/80 backdrop-blur-sm border shadow-lg hover:bg-background" />
+        </Carousel>
+      ) : (
+        <div className="text-center py-12 text-muted-foreground">
           <div className="text-4xl mb-4">🔍</div>
-          <p>No payment gateways match your current criteria.</p>
-          <p className="text-sm">Try adjusting your requirements.</p>
+          <p>No payment gateways match your criteria.</p>
+          <p className="text-sm">Try adjusting your requirements or contact us for custom recommendations.</p>
         </div>
       )}
-
     </div>
   );
 }
