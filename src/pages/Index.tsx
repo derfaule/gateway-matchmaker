@@ -33,10 +33,16 @@ const Index = () => {
             <h1 className="text-4xl font-bold text-yellow-brand-foreground mb-4">
               Find Your Perfect Payment Gateway
             </h1>
-            <p className="text-lg text-yellow-brand-foreground/80 max-w-3xl mx-auto">
-              Recurly works with over 50 top payment gateways globally. Use our tool to quickly 
-              compare costs and find the best gateway for your country.
+            <p className="text-lg text-yellow-brand-foreground/80 max-w-3xl mx-auto mb-6">
+              Recurly works with multiple payment gateways globally. Use our tool to quickly 
+              compare costs and find the best gateway for your business.
             </p>
+            <button 
+              onClick={() => document.getElementById('business-form')?.scrollIntoView({ behavior: 'smooth' })}
+              className="bg-yellow-brand-foreground text-yellow-brand px-6 py-3 rounded-lg font-semibold hover:bg-yellow-brand-foreground/90 transition-colors"
+            >
+              Compare Gateways Now
+            </button>
           </div>
         </div>
       </div>
@@ -49,9 +55,12 @@ const Index = () => {
             : 'flex justify-center'
         }`}>
           {/* Form Section */}
-          <div className={`transition-all duration-500 ease-in-out ${
-            showResults ? 'w-full' : 'w-full max-w-2xl'
-          }`}>
+          <div 
+            id="business-form"
+            className={`transition-all duration-500 ease-in-out ${
+              showResults ? 'w-full' : 'w-full max-w-2xl'
+            }`}
+          >
             <h2 className="text-2xl font-semibold mb-6">Tell us about your business</h2>
             <GatewayForm 
               onFormChange={handleFormChange} 
