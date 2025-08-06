@@ -50,6 +50,19 @@ export default function GatewayResults({ formData, showResults, showDetailedQues
   const calculateGatewayScore = (gateway: PaymentGateway): number => {
     let score = 50; // Base score
 
+    // Perfect match bonus - supports ALL selected payment methods and currencies
+    const userCurrencyCodes = formData.currencies.map(curr => curr.split('(')[1]?.replace(')', '') || curr);
+    const supportsAllPaymentMethods = formData.paymentMethods.every(method => 
+      gateway.supportedPaymentMethods.includes(method)
+    );
+    const supportsAllCurrencies = userCurrencyCodes.every(currency => 
+      gateway.supportedCurrencies.includes(currency)
+    );
+    
+    if (supportsAllPaymentMethods && supportsAllCurrencies) {
+      score += 25; // Significant bonus for perfect compatibility
+    }
+
     // Country-based scoring
     const countryScores: Record<string, Record<string, number>> = {
       "United States": { "stripe": 20, "square": 15, "authorize": 15, "paypal": 10 },
@@ -137,9 +150,10 @@ export default function GatewayResults({ formData, showResults, showDetailedQues
     .sort((a, b) => b.score - a.score)
     .slice(0, 6);
 
-  // Mark top gateway as recommended
+  // Mark top gateway as recommended and system suggested
   if (filteredGateways.length > 0) {
     filteredGateways[0].isRecommended = true;
+    filteredGateways[0].isSystemSuggested = true;
   }
 
   return (
@@ -166,6 +180,7 @@ export default function GatewayResults({ formData, showResults, showDetailedQues
                 <GatewayCard 
                   gateway={gateway} 
                   formData={formData}
+                  isSystemSuggested={gateway.isSystemSuggested || false}
                 />
               </CarouselItem>
             ))}

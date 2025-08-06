@@ -8,10 +8,12 @@ import { FormData } from "./GatewayForm";
 interface Props {
   gateway: PaymentGateway;
   formData: FormData;
+  isSystemSuggested?: boolean;
 }
 export default function GatewayCard({
   gateway,
-  formData
+  formData,
+  isSystemSuggested = false
 }: Props) {
   const [showDetails, setShowDetails] = useState(false);
 
@@ -50,7 +52,11 @@ export default function GatewayCard({
           <div className="flex-1">
             <div className="flex items-center space-x-2 mb-2">
               <h4 className="font-semibold text-xl">{gateway.name}</h4>
-              
+              {isSystemSuggested && (
+                <Badge className="bg-recommended text-recommended-foreground">
+                  Our Pick
+                </Badge>
+              )}
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">{gateway.description}</p>
           </div>

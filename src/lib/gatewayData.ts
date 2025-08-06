@@ -5,6 +5,7 @@ export interface PaymentGateway {
   description: string;
   features: string[];
   isRecommended?: boolean;
+  isSystemSuggested?: boolean;
   score: number;
   supportedCurrencies: string[];
   supportedPaymentMethods: string[];
