@@ -17,7 +17,7 @@ export default function GatewayCard({
 }: Props) {
   const [showDetails, setShowDetails] = useState(false);
 
-  // Get top 6 currencies with user-selected ones prioritized
+  // Get top 8 currencies with user-selected ones prioritized
   const getDisplayCurrencies = () => {
     const userCurrencyCodes = formData.currencies.map(curr => curr.split('(')[1]?.replace(')', '') || curr);
     const prioritized = gateway.supportedCurrencies.filter(curr => userCurrencyCodes.includes(curr));
@@ -25,7 +25,11 @@ export default function GatewayCard({
 
     // Shuffle remaining currencies for randomness
     const shuffled = remaining.sort(() => Math.random() - 0.5);
-    return [...prioritized, ...shuffled].slice(0, 6);
+    const displayed = [...prioritized, ...shuffled].slice(0, 8);
+    const totalSupported = gateway.supportedCurrencies.length;
+    const remainingCount = totalSupported - displayed.length;
+    
+    return { displayed, remainingCount };
   };
 
   // Get top 5 payment methods with user-selected ones prioritized
@@ -37,7 +41,7 @@ export default function GatewayCard({
     const shuffled = remaining.sort(() => Math.random() - 0.5);
     return [...prioritized, ...shuffled].slice(0, 5);
   };
-  const displayCurrencies = getDisplayCurrencies();
+  const currencyData = getDisplayCurrencies();
   const displayPaymentMethods = getDisplayPaymentMethods();
   const userCurrencyCodes = formData.currencies.map(curr => curr.split('(')[1]?.replace(')', '') || curr);
   return <Card className="p-6 relative bg-gateway-card border-gateway-border hover:shadow-lg transition-shadow duration-300">
@@ -66,9 +70,14 @@ export default function GatewayCard({
         <div className="space-y-2">
           <h5 className="font-medium text-sm text-foreground">Top Supported Currencies</h5>
           <div className="flex flex-wrap gap-1">
-            {displayCurrencies.map(currency => <Badge key={currency} variant={userCurrencyCodes.includes(currency) ? "default" : "secondary"} className={`text-xs ${userCurrencyCodes.includes(currency) ? 'font-semibold' : ''}`}>
+            {currencyData.displayed.map(currency => <Badge key={currency} variant={userCurrencyCodes.includes(currency) ? "default" : "secondary"} className={`text-xs ${userCurrencyCodes.includes(currency) ? 'font-semibold' : ''}`}>
                 {currency}
               </Badge>)}
+            {currencyData.remainingCount > 0 && (
+              <Badge variant="outline" className="text-xs">
+                +{currencyData.remainingCount} more
+              </Badge>
+            )}
           </div>
         </div>
 
