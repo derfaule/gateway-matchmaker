@@ -47,7 +47,6 @@ const currencies = [
   "CZK", "HUF", "THB", "MYR", "PHP", "IDR", "VND", "TRY", "ILS", "AED"
 ];
 
-
 const industries = ["Construction", "Retail", "Software", "Financial Services", "Healthcare", "Education", "Entertainment", "Manufacturing", "Professional Services", "Real Estate", "Travel & Hospitality", "Food & Beverage", "Automotive", "Technology", "Consulting", "Media & Publishing", "Non-profit"];
 
 const revenueRanges = ["0-20 M", "20-50 M", "50-200 M", "200+M"];
