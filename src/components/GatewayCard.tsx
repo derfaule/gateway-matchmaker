@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -22,25 +22,24 @@ function shuffleArray<T>(array: T[]): T[] {
   return newArray;
 }
 
-export default function GatewayCard({
+const GatewayCard = ({
   gateway,
   formData,
   isSystemSuggested = false
-}: Props) {
+}: Props) => {
   const [showDetails, setShowDetails] = useState(false);
 
   const getDisplayCurrencies = () => {
-    const userSelected = gateway.supportedCurrencies.filter(curr => 
+    const userSelected = gateway.supportedCurrencies.filter(curr =>
       formData.currencies.includes(curr)
     );
-    const notSelected = gateway.supportedCurrencies.filter(curr => 
+    const notSelected = gateway.supportedCurrencies.filter(curr =>
       !formData.currencies.includes(curr)
     );
     
     // Limit to maximum 8 total
     const maxDisplay = 8;
     const shuffledRemaining = shuffleArray(notSelected);
-    const totalToShow = Math.min(maxDisplay, userSelected.length + shuffledRemaining.length);
     const remainingSlots = Math.max(0, maxDisplay - userSelected.length);
     
     const displayed = [
@@ -54,10 +53,10 @@ export default function GatewayCard({
   };
 
   const getDisplayPaymentMethods = () => {
-    const userSelected = gateway.supportedPaymentMethods.filter(method => 
+    const userSelected = gateway.supportedPaymentMethods.filter(method =>
       formData.paymentMethods.includes(method)
     );
-    const notSelected = gateway.supportedPaymentMethods.filter(method => 
+    const notSelected = gateway.supportedPaymentMethods.filter(method =>
       !formData.paymentMethods.includes(method)
     );
     
@@ -77,95 +76,111 @@ export default function GatewayCard({
   const currencyData = getDisplayCurrencies();
   const displayPaymentMethods = getDisplayPaymentMethods();
 
-  return <Card className="p-6 relative bg-gateway-card border-gateway-border hover:shadow-lg transition-shadow duration-300">
-    {gateway.isRecommended && <Badge className="absolute top-3 right-3 bg-recommended text-recommended-foreground">
-      Recommended
-    </Badge>}
-    
-    <div className="space-y-4">
-      {/* Header */}
-      <div className="flex items-start space-x-4">
-        <div className="text-3xl">{gateway.logo}</div>
-        <div className="flex-1">
-          <div className="flex items-center space-x-2 mb-2">
-            <h4 className="font-semibold text-xl">{gateway.name}</h4>
-            {isSystemSuggested && (
-              <Badge className="bg-recommended text-recommended-foreground">
-                Our Pick
+  return (
+    <Card className="p-6 relative bg-gateway-card border-gateway-border hover:shadow-lg transition-shadow duration-300">
+      {gateway.isRecommended && (
+        <Badge className="absolute top-3 right-3 bg-recommended text-recommended-foreground">
+          Recommended
+        </Badge>
+      )}
+      
+      <div className="space-y-4">
+        {/* Header */}
+        <div className="flex items-start space-x-4">
+          <div className="text-3xl">{gateway.logo}</div>
+          <div className="flex-1">
+            <div className="flex items-center space-x-2 mb-2">
+              <h4 className="font-semibold text-xl">{gateway.name}</h4>
+              {isSystemSuggested && (
+                <Badge className="bg-recommended text-recommended-foreground">
+                  Our Pick
+                </Badge>
+              )}
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed">{gateway.description}</p>
+          </div>
+        </div>
+
+        {/* Top Supported Currencies */}
+        <div className="space-y-2">
+          <h5 className="font-medium text-sm text-foreground">Top Supported Currencies</h5>
+          <div className="flex flex-wrap gap-1">
+            {currencyData.displayed.map(currency => (
+              <Badge
+                key={currency}
+                variant={formData.currencies.includes(currency) ? "default" : "secondary"}
+                className={`text-xs ${formData.currencies.includes(currency) ? 'font-semibold' : ''}`}
+              >
+                {currency}
+              </Badge>
+            ))}
+            {currencyData.remainingCount > 0 && (
+              <Badge variant="outline" className="text-xs">
+                +{currencyData.remainingCount} more
               </Badge>
             )}
           </div>
-          <p className="text-sm text-muted-foreground leading-relaxed">{gateway.description}</p>
         </div>
-      </div>
 
-      {/* Top Supported Currencies */}
-      <div className="space-y-2">
-        <h5 className="font-medium text-sm text-foreground">Top Supported Currencies</h5>
-        <div className="flex flex-wrap gap-1">
-          {currencyData.displayed.map(currency => (
-            <Badge 
-              key={currency} 
-              variant={formData.currencies.includes(currency) ? "default" : "secondary"} 
-              className={`text-xs ${formData.currencies.includes(currency) ? 'font-semibold' : ''}`}
-            >
-              {currency}
-            </Badge>
-          ))}
-          {currencyData.remainingCount > 0 && (
-            <Badge variant="outline" className="text-xs">
-              +{currencyData.remainingCount} more
-            </Badge>
-          )}
-        </div>
-      </div>
-
-      {/* Supported Payment Methods */}
-      <div className="space-y-2">
-        <h5 className="font-medium text-sm text-foreground">Supported Payment Methods</h5>
-        <div className="flex flex-wrap gap-1">
-          {displayPaymentMethods.map(method => (
-            <Badge 
-              key={method} 
-              variant={formData.paymentMethods.includes(method) ? "default" : "secondary"} 
-              className={`text-xs ${formData.paymentMethods.includes(method) ? 'font-semibold' : ''}`}
-            >
-              {method}
-            </Badge>
-          ))}
-        </div>
-      </div>
-
-      {/* Key Features */}
-      <div className="space-y-2">
-        <h5 className="font-medium text-sm text-foreground">Key Features</h5>
-        <div className="space-y-1">
-          {gateway.features.slice(0, 3).map((feature, index) => <div key={index} className="flex items-center text-sm">
-            <span className="w-1.5 h-1.5 bg-primary rounded-full mr-2"></span>
-            {feature}
-          </div>)}
-        </div>
-      </div>
-
-      {/* More Details Button */}
-      <Button variant="outline" size="sm" className="w-full" onClick={() => setShowDetails(!showDetails)}>
-        {showDetails ? <>
-          Hide Details <ChevronUp className="w-4 h-4 ml-2" />
-        </> : <>
-          More Details <ChevronDown className="w-4 h-4 ml-2" />
-        </>}
-      </Button>
-
-      {/* Expandable Technical Details */}
-      {showDetails && <div className="mt-4 p-4 bg-muted rounded-lg space-y-3 border-l-4 border-primary">
-        <h5 className="font-medium text-sm text-foreground">Technical Details</h5>
+        {/* Supported Payment Methods */}
         <div className="space-y-2">
-          {gateway.technicalDetails.map((detail, index) => <div key={index} className="flex items-start text-sm">
-            <span className="w-1.5 h-1.5 bg-primary rounded-full mr-2 mt-2 flex-shrink-0"></span>
-            <span className="text-muted-foreground leading-relaxed">{detail}</span>
-          </div>)}
+          <h5 className="font-medium text-sm text-foreground">Supported Payment Methods</h5>
+          <div className="flex flex-wrap gap-1">
+            {displayPaymentMethods.map(method => (
+              <Badge
+                key={method}
+                variant={formData.paymentMethods.includes(method) ? "default" : "secondary"}
+                className={`text-xs ${formData.paymentMethods.includes(method) ? 'font-semibold' : ''}`}
+              >
+                {method}
+              </Badge>
+            ))}
+          </div>
         </div>
-      </div>}
-    </div>
-  </Card>;
-}
+
+        {/* Key Features */}
+        <div className="space-y-2">
+          <h5 className="font-medium text-sm text-foreground">Key Features</h5>
+          <div className="space-y-1">
+            {gateway.features.slice(0, 3).map((feature, index) => (
+              <div key={index} className="flex items-center text-sm">
+                <span className="w-1.5 h-1.5 bg-primary rounded-full mr-2"></span>
+                {feature}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* More Details Button */}
+        <Button variant="outline" size="sm" className="w-full" onClick={() => setShowDetails(!showDetails)}>
+          {showDetails ? (
+            <>
+              Hide Details <ChevronUp className="w-4 h-4 ml-2" />
+            </>
+          ) : (
+            <>
+              More Details <ChevronDown className="w-4 h-4 ml-2" />
+            </>
+          )}
+        </Button>
+
+        {/* Expandable Technical Details */}
+        {showDetails && (
+          <div className="mt-4 p-4 bg-muted rounded-lg space-y-3 border-l-4 border-primary">
+            <h5 className="font-medium text-sm text-foreground">Technical Details</h5>
+            <div className="space-y-2">
+              {gateway.technicalDetails.map((detail, index) => (
+                <div key={index} className="flex items-start text-sm">
+                  <span className="w-1.5 h-1.5 bg-primary rounded-full mr-2 mt-2 flex-shrink-0"></span>
+                  <span className="text-muted-foreground leading-relaxed">{detail}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </Card>
+  );
+};
+
+export default React.memo(GatewayCard);
