@@ -1,37 +1,75 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import GatewayForm, { FormData } from "@/components/GatewayForm";
 import GatewayResults from "@/components/GatewayResults";
-import GatewayCard from "@/components/GatewayCard";
-import { Card } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { X, ChevronDown, ChevronUp } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import { useScoreConfig } from '@/lib/ScoreConfigContext'; // Import the new hook
+import { ScoreConfigProvider } from "@/lib/ScoreConfigContext";
 
-interface Props {
-  formData: FormData;
-  showResults: boolean;
-  showDetailedQuestions: boolean;
-}
+const Index = () => {
+  const [formData, setFormData] = useState<FormData>({
+    country: "",
+    industry: "",
+    annualRevenue: "",
+    avgSubscriptionAmount: 0,
+    avgSubscriptionsPerMonth: 0,
+    currencies: [],
+    paymentMethods: []
+  });
+  const [showResults, setShowResults] = useState(false);
+  const [showDetailedQuestions, setShowDetailedQuestions] = useState(false);
+  
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-// Helper function to calculate a bonus for a perfect match in payment methods and currencies.
-const calculatePerfectMatchBonus = (gateway: PaymentGateway, formData: FormData, scoreConfig: any): number => {
-    const userCurrencyCodes = formData.currencies; // No need for conversion, already three-letter codes
-    const supportsAllPaymentMethods = formData.paymentMethods.every(method => gateway.supportedPaymentMethods.includes(method));
-    const supportsAllCurrencies = userCurrencyCodes.every(currency => gateway.supportedCurrencies.includes(currency));
-    return (supportsAllPaymentMethods && supportsAllCurrencies) ? scoreConfig.bonuses.perfectMatch : 0;
+  const handleFormChange = (data: FormData, isComplete: boolean) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      setFormData(data);
+      setShowResults(isComplete);
+    }, 500);
+  };
+
+  const handleDetailedQuestionsToggle = (enabled: boolean) => {
+    setShowDetailedQuestions(enabled);
+  };
+
+  return (
+    <ScoreConfigProvider>
+      <div className="min-h-screen bg-background">
+        <div className="bg-gradient-to-r from-yellow-brand to-yellow-brand/90 py-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center">
+              <h1 className="text-4xl font-bold text-yellow-brand-foreground mb-4">
+                Find Your Perfect Payment Gateway
+              </h1>
+              <p className="text-lg text-yellow-brand-foreground/80 max-w-3xl mx-auto mb-6">
+                Recurly works with multiple payment gateways globally. Use our tool to quickly
+                compare costs and find the best gateway for your business.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className={`transition-all duration-500 ease-in-out ${showResults ? 'grid grid-cols-1 lg:grid-cols-2 gap-8' : 'flex justify-center'}`}>
+            <div id="business-form" className={`transition-all duration-500 ease-in-out ${showResults ? 'w-full' : 'w-full max-w-2xl'}`}>
+              <h2 className="text-2xl font-semibold mb-6">Tell us about your business</h2>
+              <GatewayForm onFormChange={handleFormChange} onDetailedQuestionsToggle={handleDetailedQuestionsToggle} />
+            </div>
+
+            {showResults && (
+              <div className="transition-all duration-500 ease-in-out">
+                <GatewayResults formData={formData} showResults={showResults} showDetailedQuestions={showDetailedQuestions} />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </ScoreConfigProvider>
+  );
 };
+
+export default Index;
 
 // Helper function to calculate a bonus based on country, industry, and revenue.
 const calculateContextualBonus = (gateway: PaymentGateway, formData: FormData, scoreConfig: any): number => {
