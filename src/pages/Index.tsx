@@ -1,9 +1,7 @@
 import { useState } from "react";
 import GatewayForm, { FormData } from "@/components/GatewayForm";
 import GatewayResults from "@/components/GatewayResults";
-import GatewayCard from "@/components/GatewayCard"; 
-import { gatewayDatabase, PaymentGateway } from "@/lib/gatewayData";
-import GatewayCard from "./GatewayCard";
+import GatewayCard from "@/components/GatewayCard";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
