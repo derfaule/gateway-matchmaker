@@ -29,11 +29,10 @@ export default function GatewayCard({
 }: Props) {
   const [showDetails, setShowDetails] = useState(false);
 
-  // Get top 8 currencies with user-selected ones prioritized
   const getDisplayCurrencies = () => {
-    const userCurrencyCodes = formData.currencies.map(curr => curr.split('(')[1]?.replace(')', '') || curr);
-    const prioritized = gateway.supportedCurrencies.filter(curr => userCurrencyCodes.includes(curr));
-    const remaining = gateway.supportedCurrencies.filter(curr => !userCurrencyCodes.includes(curr));
+    // The user's selected currencies now use the correct three-letter codes
+    const prioritized = gateway.supportedCurrencies.filter(curr => formData.currencies.includes(curr));
+    const remaining = gateway.supportedCurrencies.filter(curr => !formData.currencies.includes(curr));
     const shuffled = shuffleArray(remaining);
     const displayed = [...prioritized, ...shuffled].slice(0, 8);
     const totalSupported = gateway.supportedCurrencies.length;
@@ -42,8 +41,8 @@ export default function GatewayCard({
     return { displayed, remainingCount };
   };
 
-  // Get top 5 payment methods with user-selected ones prioritized
   const getDisplayPaymentMethods = () => {
+    // This logic now correctly filters and shuffles based on the new data format
     const prioritized = gateway.supportedPaymentMethods.filter(method => formData.paymentMethods.includes(method));
     const remaining = gateway.supportedPaymentMethods.filter(method => !formData.paymentMethods.includes(method));
     const shuffled = shuffleArray(remaining);
@@ -52,7 +51,6 @@ export default function GatewayCard({
 
   const currencyData = getDisplayCurrencies();
   const displayPaymentMethods = getDisplayPaymentMethods();
-  const userCurrencyCodes = formData.currencies.map(curr => curr.split('(')[1]?.replace(')', '') || curr);
 
   return <Card className="p-6 relative bg-gateway-card border-gateway-border hover:shadow-lg transition-shadow duration-300">
     {gateway.isRecommended && <Badge className="absolute top-3 right-3 bg-recommended text-recommended-foreground">
@@ -80,7 +78,7 @@ export default function GatewayCard({
       <div className="space-y-2">
         <h5 className="font-medium text-sm text-foreground">Top Supported Currencies</h5>
         <div className="flex flex-wrap gap-1">
-          {currencyData.displayed.map(currency => <Badge key={currency} variant={userCurrencyCodes.includes(currency) ? "default" : "secondary"} className={`text-xs ${userCurrencyCodes.includes(currency) ? 'font-semibold' : ''}`}>
+          {currencyData.displayed.map(currency => <Badge key={currency} variant={formData.currencies.includes(currency) ? "default" : "secondary"} className={`text-xs ${formData.currencies.includes(currency) ? 'font-semibold' : ''}`}>
             {currency}
           </Badge>)}
           {currencyData.remainingCount > 0 && (
