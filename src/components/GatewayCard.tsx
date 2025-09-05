@@ -29,6 +29,7 @@ export default function GatewayCard({
 }: Props) {
   const [showDetails, setShowDetails] = useState(false);
 
+  // Get top 8 currencies with user-selected ones prioritized
   const getDisplayCurrencies = () => {
     const userCurrencyCodes = formData.currencies.map(curr => curr.split('(')[1]?.replace(')', '') || curr);
     const prioritized = gateway.supportedCurrencies.filter(curr => userCurrencyCodes.includes(curr));
@@ -37,10 +38,11 @@ export default function GatewayCard({
     const displayed = [...prioritized, ...shuffled].slice(0, 8);
     const totalSupported = gateway.supportedCurrencies.length;
     const remainingCount = totalSupported - displayed.length;
-
+    
     return { displayed, remainingCount };
   };
 
+  // Get top 5 payment methods with user-selected ones prioritized
   const getDisplayPaymentMethods = () => {
     const prioritized = gateway.supportedPaymentMethods.filter(method => formData.paymentMethods.includes(method));
     const remaining = gateway.supportedPaymentMethods.filter(method => !formData.paymentMethods.includes(method));
@@ -56,7 +58,7 @@ export default function GatewayCard({
     {gateway.isRecommended && <Badge className="absolute top-3 right-3 bg-recommended text-recommended-foreground">
       Recommended
     </Badge>}
-
+    
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-start space-x-4">
@@ -78,15 +80,9 @@ export default function GatewayCard({
       <div className="space-y-2">
         <h5 className="font-medium text-sm text-foreground">Top Supported Currencies</h5>
         <div className="flex flex-wrap gap-1">
-          {currencyData.displayed.map(currency => (
-            <Badge 
-              key={currency} 
-              variant={userCurrencyCodes.includes(currency) ? "default" : "secondary"} 
-              className={`text-xs ${userCurrencyCodes.includes(currency) ? 'font-semibold' : ''}`}
-            >
-              {currency}
-            </Badge>
-          ))}
+          {currencyData.displayed.map(currency => <Badge key={currency} variant={userCurrencyCodes.includes(currency) ? "default" : "secondary"} className={`text-xs ${userCurrencyCodes.includes(currency) ? 'font-semibold' : ''}`}>
+            {currency}
+          </Badge>)}
           {currencyData.remainingCount > 0 && (
             <Badge variant="outline" className="text-xs">
               +{currencyData.remainingCount} more
@@ -99,15 +95,9 @@ export default function GatewayCard({
       <div className="space-y-2">
         <h5 className="font-medium text-sm text-foreground">Supported Payment Methods</h5>
         <div className="flex flex-wrap gap-1">
-          {displayPaymentMethods.map(method => (
-            <Badge 
-              key={method} 
-              variant={formData.paymentMethods.includes(method) ? "default" : "secondary"} 
-              className={`text-xs ${formData.paymentMethods.includes(method) ? 'font-semibold' : ''}`}
-            >
-              {method}
-            </Badge>
-          ))}
+          {displayPaymentMethods.map(method => <Badge key={method} variant={formData.paymentMethods.includes(method) ? "default" : "secondary"} className={`text-xs ${formData.paymentMethods.includes(method) ? 'font-semibold' : ''}`}>
+            {method}
+          </Badge>)}
         </div>
       </div>
 
