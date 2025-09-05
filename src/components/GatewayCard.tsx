@@ -39,21 +39,7 @@ const GatewayCard = ({
     
     return { displayed, remainingCount };
 };
-    
-    // Limit to maximum 8 total
-    const maxDisplay = 8;
-    const shuffledRemaining = shuffleArray(notSelected);
-    const remainingSlots = Math.max(0, maxDisplay - userSelected.length);
-    
-    const displayed = [
-      ...userSelected,
-      ...shuffledRemaining.slice(0, remainingSlots)
-    ].slice(0, maxDisplay);
-    
-    const remainingCount = Math.max(0, gateway.supportedCurrencies.length - displayed.length);
-    
-    return { displayed, remainingCount };
-  };
+
 
 const getDisplayPaymentMethods = () => {
     // These arrays are no longer needed since we're showing all
