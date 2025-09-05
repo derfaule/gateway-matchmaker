@@ -30,23 +30,48 @@ export default function GatewayCard({
   const [showDetails, setShowDetails] = useState(false);
 
   const getDisplayCurrencies = () => {
-    // The user's selected currencies now use the correct three-letter codes
-    const prioritized = gateway.supportedCurrencies.filter(curr => formData.currencies.includes(curr));
-    const remaining = gateway.supportedCurrencies.filter(curr => !formData.currencies.includes(curr));
-    const shuffled = shuffleArray(remaining);
-    const displayed = [...prioritized, ...shuffled].slice(0, 8);
-    const totalSupported = gateway.supportedCurrencies.length;
-    const remainingCount = totalSupported - displayed.length;
+    const userSelected = gateway.supportedCurrencies.filter(curr => 
+      formData.currencies.includes(curr)
+    );
+    const notSelected = gateway.supportedCurrencies.filter(curr => 
+      !formData.currencies.includes(curr)
+    );
+    
+    // Limit to maximum 8 total
+    const maxDisplay = 8;
+    const shuffledRemaining = shuffleArray(notSelected);
+    const totalToShow = Math.min(maxDisplay, userSelected.length + shuffledRemaining.length);
+    const remainingSlots = Math.max(0, maxDisplay - userSelected.length);
+    
+    const displayed = [
+      ...userSelected,
+      ...shuffledRemaining.slice(0, remainingSlots)
+    ].slice(0, maxDisplay);
+    
+    const remainingCount = Math.max(0, gateway.supportedCurrencies.length - displayed.length);
     
     return { displayed, remainingCount };
   };
 
   const getDisplayPaymentMethods = () => {
-    // This logic now correctly filters and shuffles based on the new data format
-    const prioritized = gateway.supportedPaymentMethods.filter(method => formData.paymentMethods.includes(method));
-    const remaining = gateway.supportedPaymentMethods.filter(method => !formData.paymentMethods.includes(method));
-    const shuffled = shuffleArray(remaining);
-    return [...prioritized, ...shuffled].slice(0, 5);
+    const userSelected = gateway.supportedPaymentMethods.filter(method => 
+      formData.paymentMethods.includes(method)
+    );
+    const notSelected = gateway.supportedPaymentMethods.filter(method => 
+      !formData.paymentMethods.includes(method)
+    );
+    
+    // Limit to maximum 5 total
+    const maxDisplay = 5;
+    const shuffledRemaining = shuffleArray(notSelected);
+    const remainingSlots = Math.max(0, maxDisplay - userSelected.length);
+    
+    const displayed = [
+      ...userSelected,
+      ...shuffledRemaining.slice(0, remainingSlots)
+    ].slice(0, maxDisplay);
+    
+    return displayed;
   };
 
   const currencyData = getDisplayCurrencies();
