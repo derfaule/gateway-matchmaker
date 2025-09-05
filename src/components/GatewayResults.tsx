@@ -75,11 +75,13 @@ const calculateContextualBonus = (gateway: PaymentGateway, formData: FormData): 
 // Helper function to calculate a bonus based on special features.
 const calculateFeatureBonus = (gateway: PaymentGateway, formData: FormData): number => {
     let bonus = 0;
-    if (formData.needGatewayTokens && gateway.gatewayTokensSupported === "Yes") {
-        bonus += 15;
+    // Add bonus for gateways with comprehensive feature sets
+    if (gateway.features.length > 4) {
+        bonus += 10;
     }
-    if (formData.admitToolImport && gateway.admitToolCanImportData === "Yes") {
-        bonus += 15;
+    // Add bonus for gateways with extensive technical capabilities
+    if (gateway.technicalDetails.length > 8) {
+        bonus += 5;
     }
     return bonus;
 };
