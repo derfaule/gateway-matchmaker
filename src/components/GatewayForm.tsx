@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { X } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { allPaymentMethods } from "@/lib/gatewayData";
+
 export interface FormData {
   country: string;
   industry: string;
@@ -23,11 +24,16 @@ export interface FormData {
   targetMarkets?: string[];
   merchantOfRecord?: boolean;
   fraudDetectionRequired?: boolean;
+  // NEW CRITERIA
+  needGatewayTokens?: boolean;
+  admitToolImport?: boolean;
 }
+
 interface Props {
   onFormChange: (data: FormData, isComplete: boolean) => void;
   onDetailedQuestionsToggle: (enabled: boolean) => void;
 }
+
 const countries = ["United States", "United Kingdom", "Canada", "Germany", "France", "Australia", "Netherlands", "Sweden", "Norway", "Denmark", "Switzerland", "Belgium", "Austria", "Ireland", "Finland", "Spain", "Italy", "Portugal", "Japan", "Singapore", "New Zealand", "Brazil", "Mexico", "India", "China"];
 const industries = ["Construction", "Retail", "Software", "Financial Services", "Healthcare", "Education", "Entertainment", "Manufacturing", "Professional Services", "Real Estate", "Travel & Hospitality", "Food & Beverage", "Automotive", "Technology", "Consulting", "Media & Publishing", "Non-profit"];
 const revenueRanges = ["0-20 M", "20-50 M", "50-200 M", "200+M"];
@@ -53,23 +59,33 @@ export default function GatewayForm({
   const [detailedData, setDetailedData] = useState<Partial<FormData>>({});
   const [marketSearch, setMarketSearch] = useState("");
   const [targetMarketSearch, setTargetMarketSearch] = useState("");
+
   const isFormComplete = formData.country && formData.industry && formData.annualRevenue;
   const markets = ["United States", "United Kingdom", "Canada", "Germany", "France", "Australia", "Netherlands", "Sweden", "Norway", "Denmark", "Switzerland", "Belgium", "Austria", "Ireland", "Finland", "Spain", "Italy", "Portugal", "Japan", "Singapore", "New Zealand", "Brazil", "Mexico", "India", "China", "South Korea", "EMEA", "LATAM", "APAC", "NA"];
+
   useEffect(() => {
-    onFormChange(formData, isFormComplete && isSubmitted);
-  }, [formData, isFormComplete, isSubmitted, onFormChange]);
+    // Merge base form data with detailed data for a complete payload
+    const finalData: FormData = {
+      ...formData,
+      ...(showDetailedQuestions ? detailedData : {})
+    };
+    onFormChange(finalData, isFormComplete && isSubmitted);
+  }, [formData, detailedData, isFormComplete, isSubmitted, onFormChange, showDetailedQuestions]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormComplete) {
       setIsSubmitted(true);
     }
   };
+
   const updateFormData = (updates: Partial<FormData>) => {
     setFormData(prev => ({
       ...prev,
       ...updates
     }));
   };
+
   const addCurrency = (currency: string) => {
     if (!formData.currencies.includes(currency)) {
       updateFormData({
@@ -78,11 +94,13 @@ export default function GatewayForm({
     }
     setCurrencySearch("");
   };
+
   const removeCurrency = (currency: string) => {
     updateFormData({
       currencies: formData.currencies.filter(c => c !== currency)
     });
   };
+
   const addPaymentMethod = (method: string) => {
     if (!formData.paymentMethods.includes(method)) {
       updateFormData({
@@ -91,20 +109,23 @@ export default function GatewayForm({
     }
     setPaymentSearch("");
   };
+
   const removePaymentMethod = (method: string) => {
     updateFormData({
       paymentMethods: formData.paymentMethods.filter(m => m !== method)
     });
   };
+
   const filteredCurrencies = currencies.filter(currency => currency.toLowerCase().includes(currencySearch.toLowerCase()));
   const filteredPaymentMethods = allPaymentMethods.filter(method => method.toLowerCase().includes(paymentSearch.toLowerCase()));
-  return <Card className="p-6 space-y-6">
+
+  return (
+    <Card className="p-6 space-y-6">
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Basic Form Fields */}
         <div className="space-y-2">
           <Label htmlFor="country">Corporate headquarters country</Label>
-          <Select value={formData.country} onValueChange={value => updateFormData({
-          country: value
-        })}>
+          <Select value={formData.country} onValueChange={value => updateFormData({ country: value })}>
             <SelectTrigger>
               <SelectValue placeholder="Select a country" />
             </SelectTrigger>
@@ -116,9 +137,7 @@ export default function GatewayForm({
 
         <div className="space-y-2">
           <Label htmlFor="industry">Industry</Label>
-          <Select value={formData.industry} onValueChange={value => updateFormData({
-          industry: value
-        })}>
+          <Select value={formData.industry} onValueChange={value => updateFormData({ industry: value })}>
             <SelectTrigger>
               <SelectValue placeholder="Select your industry" />
             </SelectTrigger>
@@ -130,9 +149,7 @@ export default function GatewayForm({
 
         <div className="space-y-2">
           <Label htmlFor="revenue">Annual Revenue</Label>
-          <Select value={formData.annualRevenue} onValueChange={value => updateFormData({
-          annualRevenue: value
-        })}>
+          <Select value={formData.annualRevenue} onValueChange={value => updateFormData({ annualRevenue: value })}>
             <SelectTrigger>
               <SelectValue placeholder="Select a range" />
             </SelectTrigger>
@@ -144,32 +161,34 @@ export default function GatewayForm({
 
         <div className="space-y-2">
           <Label htmlFor="subscription-amount">Average Subscription Amount</Label>
-          <Input id="subscription-amount" type="number" placeholder="0" value={formData.avgSubscriptionAmount || ""} onChange={e => updateFormData({
-          avgSubscriptionAmount: Number(e.target.value)
-        })} />
+          <Input id="subscription-amount" type="number" placeholder="0" value={formData.avgSubscriptionAmount || ""} onChange={e => updateFormData({ avgSubscriptionAmount: Number(e.target.value) })} />
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="subscriptions-count">Average # of subscriptions a month</Label>
-          <Input id="subscriptions-count" type="number" placeholder="0" value={formData.avgSubscriptionsPerMonth || ""} onChange={e => updateFormData({
-          avgSubscriptionsPerMonth: Number(e.target.value)
-        })} />
+          <Input id="subscriptions-count" type="number" placeholder="0" value={formData.avgSubscriptionsPerMonth || ""} onChange={e => updateFormData({ avgSubscriptionsPerMonth: Number(e.target.value) })} />
         </div>
 
         <div className="space-y-2">
           <Label>Accepted Currencies</Label>
           <div className="space-y-2">
             <Input placeholder="Search a currency" value={currencySearch} onChange={e => setCurrencySearch(e.target.value)} />
-            {currencySearch && filteredCurrencies.length > 0 && <div className="border border-border rounded-md bg-popover max-h-40 overflow-y-auto">
-                {filteredCurrencies.slice(0, 5).map(currency => <div key={currency} className="px-3 py-2 hover:bg-accent cursor-pointer" onClick={() => addCurrency(currency)}>
+            {currencySearch && filteredCurrencies.length > 0 && (
+              <div className="border border-border rounded-md bg-popover max-h-40 overflow-y-auto">
+                {filteredCurrencies.slice(0, 5).map(currency => (
+                  <div key={currency} className="px-3 py-2 hover:bg-accent cursor-pointer" onClick={() => addCurrency(currency)}>
                     {currency}
-                  </div>)}
-              </div>}
+                  </div>
+                ))}
+              </div>
+            )}
             <div className="flex flex-wrap gap-2">
-              {formData.currencies.map(currency => <Badge key={currency} variant="secondary" className="pr-1">
+              {formData.currencies.map(currency => (
+                <Badge key={currency} variant="secondary" className="pr-1">
                   {currency}
                   <X className="w-3 h-3 ml-1 cursor-pointer" onClick={() => removeCurrency(currency)} />
-                </Badge>)}
+                </Badge>
+              ))}
             </div>
           </div>
         </div>
@@ -178,16 +197,22 @@ export default function GatewayForm({
           <Label>Payment methods</Label>
           <div className="space-y-2">
             <Input placeholder="Search payment methods" value={paymentSearch} onChange={e => setPaymentSearch(e.target.value)} />
-            {paymentSearch && filteredPaymentMethods.length > 0 && <div className="border border-border rounded-md bg-popover max-h-40 overflow-y-auto">
-                {filteredPaymentMethods.slice(0, 5).map(method => <div key={method} className="px-3 py-2 hover:bg-accent cursor-pointer" onClick={() => addPaymentMethod(method)}>
+            {paymentSearch && filteredPaymentMethods.length > 0 && (
+              <div className="border border-border rounded-md bg-popover max-h-40 overflow-y-auto">
+                {filteredPaymentMethods.slice(0, 5).map(method => (
+                  <div key={method} className="px-3 py-2 hover:bg-accent cursor-pointer" onClick={() => addPaymentMethod(method)}>
                     {method}
-                  </div>)}
-              </div>}
+                  </div>
+                ))}
+              </div>
+            )}
             <div className="flex flex-wrap gap-2">
-              {formData.paymentMethods.map(method => <Badge key={method} variant="secondary" className="pr-1">
+              {formData.paymentMethods.map(method => (
+                <Badge key={method} variant="secondary" className="pr-1">
                   {method}
                   <X className="w-3 h-3 ml-1 cursor-pointer" onClick={() => removePaymentMethod(method)} />
-                </Badge>)}
+                </Badge>
+              ))}
             </div>
           </div>
         </div>
@@ -196,19 +221,21 @@ export default function GatewayForm({
       </form>
 
       {/* Detailed Questions Toggle */}
-      {isSubmitted && <div className="mt-6 pt-6 border-t border-border">
+      {isSubmitted && (
+        <div className="mt-6 pt-6 border-t border-border">
           <div className="flex items-center space-x-3 p-4 bg-muted/50 rounded-lg">
             <Switch id="detailed-questions" checked={showDetailedQuestions} onCheckedChange={checked => {
-          setShowDetailedQuestions(checked);
-          onDetailedQuestionsToggle(checked);
-        }} />
+              setShowDetailedQuestions(checked);
+              onDetailedQuestionsToggle(checked);
+            }} />
             <Label htmlFor="detailed-questions" className="text-sm font-medium cursor-pointer">
               Answer more detailed questions for more accurate results.
             </Label>
           </div>
 
           {/* Detailed Questions Section */}
-          {showDetailedQuestions && <Card className="mt-4 p-6 space-y-6 bg-accent/5 border-accent/20">
+          {showDetailedQuestions && (
+            <Card className="mt-4 p-6 space-y-6 bg-accent/5 border-accent/20">
               <div className="flex items-center justify-between">
                 <h4 className="text-lg font-semibold">Optional Details</h4>
               </div>
@@ -216,129 +243,134 @@ export default function GatewayForm({
               <div className="grid gap-6 md:grid-cols-1">
                 {/* Projected Growth Rate */}
                 <div className="space-y-2">
-                  <Label htmlFor="growth-rate">
-                    Projected Growth Rate <span className="text-muted-foreground">(Optional)</span>
-                  </Label>
+                  <Label htmlFor="growth-rate">Projected Growth Rate <span className="text-muted-foreground">(Optional)</span></Label>
                   <div className="relative">
-                    <Input id="growth-rate" type="number" placeholder="0" value={detailedData.projectedGrowthRate || ""} onChange={e => setDetailedData(prev => ({
-                ...prev,
-                projectedGrowthRate: Number(e.target.value)
-              }))} />
+                    <Input id="growth-rate" type="number" placeholder="0" value={detailedData.projectedGrowthRate || ""} onChange={e => setDetailedData(prev => ({ ...prev, projectedGrowthRate: Number(e.target.value) }))} />
                     <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">%</span>
                   </div>
                 </div>
 
                 {/* Local Acquiring Needed */}
                 <div className="space-y-2">
-                  <Label>
-                    Local Acquiring Needed? <span className="text-muted-foreground">(Optional)</span>
-                  </Label>
+                  <Label>Local Acquiring Needed? <span className="text-muted-foreground">(Optional)</span></Label>
                   <div className="flex items-center space-x-4">
                     <div className="flex items-center space-x-2">
-                      <input type="radio" id="acquiring-yes" name="localAcquiring" checked={detailedData.localAcquiringNeeded === true} onChange={() => setDetailedData(prev => ({
-                  ...prev,
-                  localAcquiringNeeded: true
-                }))} className="w-4 h-4" />
+                      <input type="radio" id="acquiring-yes" name="localAcquiring" checked={detailedData.localAcquiringNeeded === true} onChange={() => setDetailedData(prev => ({ ...prev, localAcquiringNeeded: true }))} className="w-4 h-4" />
                       <Label htmlFor="acquiring-yes" className="text-sm">Yes</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <input type="radio" id="acquiring-no" name="localAcquiring" checked={detailedData.localAcquiringNeeded === false} onChange={() => setDetailedData(prev => ({
-                  ...prev,
-                  localAcquiringNeeded: false
-                }))} className="w-4 h-4" />
+                      <input type="radio" id="acquiring-no" name="localAcquiring" checked={detailedData.localAcquiringNeeded === false} onChange={() => setDetailedData(prev => ({ ...prev, localAcquiringNeeded: false }))} className="w-4 h-4" />
                       <Label htmlFor="acquiring-no" className="text-sm">No</Label>
+                    </div>
+                  </div>
+                </div>
+
+                {/* New Feature: Gateway Token Support */}
+                <div className="space-y-2">
+                  <Label>Do you need to support gateway tokens? <span className="text-muted-foreground">(Optional)</span></Label>
+                  <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-2">
+                      <input type="radio" id="tokens-yes" name="tokens" checked={detailedData.needGatewayTokens === true} onChange={() => setDetailedData(prev => ({ ...prev, needGatewayTokens: true }))} className="w-4 h-4" />
+                      <Label htmlFor="tokens-yes" className="text-sm">Yes</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <input type="radio" id="tokens-no" name="tokens" checked={detailedData.needGatewayTokens === false} onChange={() => setDetailedData(prev => ({ ...prev, needGatewayTokens: false }))} className="w-4 h-4" />
+                      <Label htmlFor="tokens-no" className="text-sm">No</Label>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* New Feature: ADMIT tool import */}
+                <div className="space-y-2">
+                  <Label>Will you need to import data using the ADMIT tool? <span className="text-muted-foreground">(Optional)</span></Label>
+                  <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-2">
+                      <input type="radio" id="admit-yes" name="admit" checked={detailedData.admitToolImport === true} onChange={() => setDetailedData(prev => ({ ...prev, admitToolImport: true }))} className="w-4 h-4" />
+                      <Label htmlFor="admit-yes" className="text-sm">Yes</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <input type="radio" id="admit-no" name="admit" checked={detailedData.admitToolImport === false} onChange={() => setDetailedData(prev => ({ ...prev, admitToolImport: false }))} className="w-4 h-4" />
+                      <Label htmlFor="admit-no" className="text-sm">No</Label>
                     </div>
                   </div>
                 </div>
 
                 {/* Top 80% Revenue Markets */}
                 <div className="space-y-2">
-                  <Label>
-                    Which markets generate your top 80% of revenue today? <span className="text-muted-foreground">(Optional)</span>
-                  </Label>
+                  <Label>Which markets generate your top 80% of revenue today? <span className="text-muted-foreground">(Optional)</span></Label>
                   <div className="space-y-2">
                     <Input placeholder="Search markets..." value={marketSearch} onChange={e => setMarketSearch(e.target.value)} />
-                    {marketSearch && <div className="border border-border rounded-md bg-popover max-h-40 overflow-y-auto">
-                        {markets.filter(market => market.toLowerCase().includes(marketSearch.toLowerCase())).slice(0, 5).map(market => <div key={market} className="px-3 py-2 hover:bg-accent cursor-pointer" onClick={() => {
-                  const currentMarkets = detailedData.top80RevenueMarkets || [];
-                  if (!currentMarkets.includes(market)) {
-                    setDetailedData(prev => ({
-                      ...prev,
-                      top80RevenueMarkets: [...currentMarkets, market]
-                    }));
-                  }
-                  setMarketSearch("");
-                }}>
-                              {market}
-                            </div>)}
-                      </div>}
+                    {marketSearch && (
+                      <div className="border border-border rounded-md bg-popover max-h-40 overflow-y-auto">
+                        {markets.filter(market => market.toLowerCase().includes(marketSearch.toLowerCase())).slice(0, 5).map(market => (
+                          <div key={market} className="px-3 py-2 hover:bg-accent cursor-pointer" onClick={() => {
+                            const currentMarkets = detailedData.top80RevenueMarkets || [];
+                            if (!currentMarkets.includes(market)) {
+                              setDetailedData(prev => ({ ...prev, top80RevenueMarkets: [...currentMarkets, market] }));
+                            }
+                            setMarketSearch("");
+                          }}>
+                            {market}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                     <div className="flex flex-wrap gap-2">
-                      {(detailedData.top80RevenueMarkets || []).map(market => <Badge key={market} variant="secondary" className="pr-1">
+                      {(detailedData.top80RevenueMarkets || []).map(market => (
+                        <Badge key={market} variant="secondary" className="pr-1">
                           {market}
                           <X className="w-3 h-3 ml-1 cursor-pointer" onClick={() => {
-                    setDetailedData(prev => ({
-                      ...prev,
-                      top80RevenueMarkets: (prev.top80RevenueMarkets || []).filter(m => m !== market)
-                    }));
-                  }} />
-                        </Badge>)}
+                            setDetailedData(prev => ({ ...prev, top80RevenueMarkets: (prev.top80RevenueMarkets || []).filter(m => m !== market) }));
+                          }} />
+                        </Badge>
+                      ))}
                     </div>
                   </div>
                 </div>
 
                 {/* Target Markets */}
                 <div className="space-y-2">
-                  <Label>
-                    Which markets are you targeting next? <span className="text-muted-foreground">(Optional)</span>
-                  </Label>
+                  <Label>Which markets are you targeting next? <span className="text-muted-foreground">(Optional)</span></Label>
                   <div className="space-y-2">
                     <Input placeholder="Search target markets..." value={targetMarketSearch} onChange={e => setTargetMarketSearch(e.target.value)} />
-                    {targetMarketSearch && <div className="border border-border rounded-md bg-popover max-h-40 overflow-y-auto">
-                        {markets.filter(market => market.toLowerCase().includes(targetMarketSearch.toLowerCase())).slice(0, 5).map(market => <div key={market} className="px-3 py-2 hover:bg-accent cursor-pointer" onClick={() => {
-                  const currentTargets = detailedData.targetMarkets || [];
-                  if (!currentTargets.includes(market)) {
-                    setDetailedData(prev => ({
-                      ...prev,
-                      targetMarkets: [...currentTargets, market]
-                    }));
-                  }
-                  setTargetMarketSearch("");
-                }}>
-                              {market}
-                            </div>)}
-                      </div>}
+                    {targetMarketSearch && (
+                      <div className="border border-border rounded-md bg-popover max-h-40 overflow-y-auto">
+                        {markets.filter(market => market.toLowerCase().includes(targetMarketSearch.toLowerCase())).slice(0, 5).map(market => (
+                          <div key={market} className="px-3 py-2 hover:bg-accent cursor-pointer" onClick={() => {
+                            const currentTargets = detailedData.targetMarkets || [];
+                            if (!currentTargets.includes(market)) {
+                              setDetailedData(prev => ({ ...prev, targetMarkets: [...currentTargets, market] }));
+                            }
+                            setTargetMarketSearch("");
+                          }}>
+                            {market}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                     <div className="flex flex-wrap gap-2">
-                      {(detailedData.targetMarkets || []).map(market => <Badge key={market} variant="secondary" className="pr-1">
+                      {(detailedData.targetMarkets || []).map(market => (
+                        <Badge key={market} variant="secondary" className="pr-1">
                           {market}
                           <X className="w-3 h-3 ml-1 cursor-pointer" onClick={() => {
-                    setDetailedData(prev => ({
-                      ...prev,
-                      targetMarkets: (prev.targetMarkets || []).filter(m => m !== market)
-                    }));
-                  }} />
-                        </Badge>)}
+                            setDetailedData(prev => ({ ...prev, targetMarkets: (prev.targetMarkets || []).filter(m => m !== market) }));
+                          }} />
+                        </Badge>
+                      ))}
                     </div>
                   </div>
                 </div>
 
                 {/* Merchant of Record */}
                 <div className="space-y-2">
-                  <Label>
-                    Are you a Merchant of Record/Payout Requirements? <span className="text-muted-foreground">(Optional)</span>
-                  </Label>
+                  <Label>Are you a Merchant of Record/Payout Requirements? <span className="text-muted-foreground">(Optional)</span></Label>
                   <div className="flex items-center space-x-4">
                     <div className="flex items-center space-x-2">
-                      <input type="radio" id="merchant-yes" name="merchantOfRecord" checked={detailedData.merchantOfRecord === true} onChange={() => setDetailedData(prev => ({
-                  ...prev,
-                  merchantOfRecord: true
-                }))} className="w-4 h-4" />
+                      <input type="radio" id="merchant-yes" name="merchantOfRecord" checked={detailedData.merchantOfRecord === true} onChange={() => setDetailedData(prev => ({ ...prev, merchantOfRecord: true }))} className="w-4 h-4" />
                       <Label htmlFor="merchant-yes" className="text-sm">Yes</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <input type="radio" id="merchant-no" name="merchantOfRecord" checked={detailedData.merchantOfRecord === false} onChange={() => setDetailedData(prev => ({
-                  ...prev,
-                  merchantOfRecord: false
-                }))} className="w-4 h-4" />
+                      <input type="radio" id="merchant-no" name="merchantOfRecord" checked={detailedData.merchantOfRecord === false} onChange={() => setDetailedData(prev => ({ ...prev, merchantOfRecord: false }))} className="w-4 h-4" />
                       <Label htmlFor="merchant-no" className="text-sm">No</Label>
                     </div>
                   </div>
@@ -346,28 +378,23 @@ export default function GatewayForm({
 
                 {/* Fraud Detection Required */}
                 <div className="space-y-2">
-                  <Label>
-                    Do you require Fraud Detection? <span className="text-muted-foreground">(Optional)</span>
-                  </Label>
+                  <Label>Do you require Fraud Detection? <span className="text-muted-foreground">(Optional)</span></Label>
                   <div className="flex items-center space-x-4">
                     <div className="flex items-center space-x-2">
-                      <input type="radio" id="fraud-yes" name="fraudDetection" checked={detailedData.fraudDetectionRequired === true} onChange={() => setDetailedData(prev => ({
-                  ...prev,
-                  fraudDetectionRequired: true
-                }))} className="w-4 h-4" />
+                      <input type="radio" id="fraud-yes" name="fraudDetection" checked={detailedData.fraudDetectionRequired === true} onChange={() => setDetailedData(prev => ({ ...prev, fraudDetectionRequired: true }))} className="w-4 h-4" />
                       <Label htmlFor="fraud-yes" className="text-sm">Yes</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <input type="radio" id="fraud-no" name="fraudDetection" checked={detailedData.fraudDetectionRequired === false} onChange={() => setDetailedData(prev => ({
-                  ...prev,
-                  fraudDetectionRequired: false
-                }))} className="w-4 h-4" />
+                      <input type="radio" id="fraud-no" name="fraudDetection" checked={detailedData.fraudDetectionRequired === false} onChange={() => setDetailedData(prev => ({ ...prev, fraudDetectionRequired: false }))} className="w-4 h-4" />
                       <Label htmlFor="fraud-no" className="text-sm">No</Label>
                     </div>
                   </div>
                 </div>
               </div>
-            </Card>}
-        </div>}
-    </Card>;
+            </Card>
+          )}
+        </div>
+      )}
+    </Card>
+  );
 }
