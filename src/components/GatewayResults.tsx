@@ -17,7 +17,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { useScoreConfig } from './ScoreConfigContext'; // Import the new hook
+import { useScoreConfig } from '@/lib/ScoreConfigContext';
 
 interface Props {
   formData: FormData;
