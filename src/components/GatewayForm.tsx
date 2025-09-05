@@ -34,10 +34,25 @@ interface Props {
   onDetailedQuestionsToggle: (enabled: boolean) => void;
 }
 
-const countries = ["United States", "United Kingdom", "Canada", "Germany", "France", "Australia", "Netherlands", "Sweden", "Norway", "Denmark", "Switzerland", "Belgium", "Austria", "Ireland", "Finland", "Spain", "Italy", "Portugal", "Japan", "Singapore", "New Zealand", "Brazil", "Mexico", "India", "China"];
+const countries = [
+  "United States", "United Kingdom", "Canada", "Germany", "France", "Australia",
+  "Netherlands", "Sweden", "Norway", "Denmark", "Switzerland", "Belgium",
+  "Austria", "Ireland", "Finland", "Spain", "Italy", "Portugal", "Japan",
+  "Singapore", "New Zealand", "Brazil", "Mexico", "India", "China", "South Korea"
+];
+
+const currencies = [
+  "United States Dollar (USD)", "Euro (EUR)", "British Pound (GBP)",
+  "Canadian Dollar (CAD)", "Australian Dollar (AUD)", "Japanese Yen (JPY)",
+  "Swiss Franc (CHF)", "Swedish Krona (SEK)", "Norwegian Krone (NOK)",
+  "Danish Krone (DKK)", "Singapore Dollar (SGD)", "Hong Kong Dollar (HKD)",
+  "Brazilian Real (BRL)", "Mexican Peso (MXN)", "Indian Rupee (INR)",
+  "Chinese Yuan (CNY)", "South Korean Won (KRW)" // Added
+];
+
 const industries = ["Construction", "Retail", "Software", "Financial Services", "Healthcare", "Education", "Entertainment", "Manufacturing", "Professional Services", "Real Estate", "Travel & Hospitality", "Food & Beverage", "Automotive", "Technology", "Consulting", "Media & Publishing", "Non-profit"];
+
 const revenueRanges = ["0-20 M", "20-50 M", "50-200 M", "200+M"];
-const currencies = ["United States Dollar (USD)", "Euro (EUR)", "British Pound (GBP)", "Canadian Dollar (CAD)", "Australian Dollar (AUD)", "Japanese Yen (JPY)", "Swiss Franc (CHF)", "Swedish Krona (SEK)", "Norwegian Krone (NOK)", "Danish Krone (DKK)", "Singapore Dollar (SGD)", "Hong Kong Dollar (HKD)", "Brazilian Real (BRL)", "Mexican Peso (MXN)", "Indian Rupee (INR)", "Chinese Yuan (CNY)"];
 
 export default function GatewayForm({
   onFormChange,
