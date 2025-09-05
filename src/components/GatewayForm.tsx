@@ -42,26 +42,11 @@ const countries = [
 ];
 
 const currencies = [
-  "United States Dollar (USD)", "Euro (EUR)", "British Pound (GBP)",
-  "Canadian Dollar (CAD)", "Australian Dollar (AUD)", "Japanese Yen (JPY)",
-  "Swiss Franc (CHF)", "Swedish Krona (SEK)", "Norwegian Krone (NOK)",
-  "Danish Krone (DKK)", "Singapore Dollar (SGD)", "Hong Kong Dollar (HKD)",
-  "Brazilian Real (BRL)", "Mexican Peso (MXN)", "Indian Rupee (INR)",
-  "Chinese Yuan (CNY)", "South Korean Won (KRW)" // Added
-];
-const currencies = [
   "USD", "EUR", "GBP", "CAD", "AUD", "JPY", "CHF", "SEK", "NOK", "DKK", 
   "SGD", "HKD", "BRL", "MXN", "INR", "CNY", "KRW", "ZAR", "RUB", "PLN",
   "CZK", "HUF", "THB", "MYR", "PHP", "IDR", "VND", "TRY", "ILS", "AED"
 ];
 
-const allPaymentMethods = [
-  "Credit Cards", "PayPal", "Apple Pay", "Google Pay", "Bank Transfer", 
-  "SEPA Direct Debit", "iDEAL", "Klarna", "Afterpay", "WeChat Pay", "Alipay", 
-  "Venmo", "Zelle", "ACH", "Wire Transfer", "BACS", "BECS", "Faster Payments", 
-  "SOFORT", "Giropay", "Bancontact", "EPS", "Przelewy24", "Multibanco", "BLIK", 
-  "Trustly", "Paysafecard", "Skrill", "Carte Bancaire"
-];
 
 const industries = ["Construction", "Retail", "Software", "Financial Services", "Healthcare", "Education", "Entertainment", "Manufacturing", "Professional Services", "Real Estate", "Travel & Hospitality", "Food & Beverage", "Automotive", "Technology", "Consulting", "Media & Publishing", "Non-profit"];
 
