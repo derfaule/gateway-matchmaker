@@ -17,6 +17,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { useScoreConfig } from './ScoreConfigContext'; // Import the new hook
 
 interface Props {
   formData: FormData;
@@ -25,82 +26,59 @@ interface Props {
 }
 
 // Helper function to calculate a bonus for a perfect match in payment methods and currencies.
-const calculatePerfectMatchBonus = (gateway: PaymentGateway, formData: FormData): number => {
-    const userCurrencyCodes = formData.currencies.map(curr => curr.split('(')[1]?.replace(')', '') || curr);
+const calculatePerfectMatchBonus = (gateway: PaymentGateway, formData: FormData, scoreConfig: any): number => {
+    const userCurrencyCodes = formData.currencies; // No need for conversion, already three-letter codes
     const supportsAllPaymentMethods = formData.paymentMethods.every(method => gateway.supportedPaymentMethods.includes(method));
     const supportsAllCurrencies = userCurrencyCodes.every(currency => gateway.supportedCurrencies.includes(currency));
-    return (supportsAllPaymentMethods && supportsAllCurrencies) ? 25 : 0;
+    return (supportsAllPaymentMethods && supportsAllCurrencies) ? scoreConfig.bonuses.perfectMatch : 0;
 };
 
 // Helper function to calculate a bonus based on country, industry, and revenue.
-const calculateContextualBonus = (gateway: PaymentGateway, formData: FormData): number => {
+const calculateContextualBonus = (gateway: PaymentGateway, formData: FormData, scoreConfig: any): number => {
     let bonus = 0;
 
-    const countryScores: Record<string, Record<string, number>> = {
-        "United States": { "Adyen": 15, "PayPal": 10, "Worldpay": 5, "Stripe": 20, "Checkout.com": 5 },
-        "United Kingdom": { "Adyen": 20, "Worldpay": 15, "Stripe": 15, "Checkout.com": 10, "PayPal": 10 },
-        "Germany": { "Adyen": 20, "Stripe": 15, "PayPal": 10, "Checkout.com": 10, "Klarna": 15 },
-        "Brazil": { "dLocal": 20, "Stripe": 10, "Adyen": 10, "PayPal": 5 },
-        "Mexico": { "dLocal": 20, "Stripe": 10, "PayPal": 5 },
-        "South Korea": { "KakaoPay": 25, "NaverPay": 20, "Payco": 15, "Adyen": 10, "Stripe": 10 },
-    };
-    if (countryScores[formData.country]?.[gateway.name]) {
-        bonus += countryScores[formData.country][gateway.name];
+    if (scoreConfig.bonuses.regionalBonus[formData.country]?.[gateway.name]) {
+        bonus += scoreConfig.bonuses.regionalBonus[formData.country][gateway.name];
     }
     
-    const industryScores: Record<string, Record<string, number>> = {
-      "Software": { "Stripe": 20, "PayPal": 15, "Adyen": 10 },
-      "Retail": { "Stripe": 15, "PayPal": 15, "Adyen": 15, "Worldpay": 10 },
-      "Financial Services": { "Adyen": 15, "Checkout.com": 10, "Worldpay": 10 },
-      "Healthcare": { "Stripe": 10, "Adyen": 5 },
-      "Education": { "PayPal": 15, "Stripe": 15 },
-    };
-    if (industryScores[formData.industry]?.[gateway.name]) {
-        bonus += industryScores[formData.industry][gateway.name];
+    if (scoreConfig.bonuses.industryBonus[formData.industry]?.[gateway.name]) {
+        bonus += scoreConfig.bonuses.industryBonus[formData.industry][gateway.name];
     }
 
-    const revenueScores: Record<string, Record<string, number>> = {
-      "0-20 M": { "Stripe": 15, "PayPal": 15, "Fiserv": 10 },
-      "20-50 M": { "Stripe": 15, "Adyen": 10, "PayPal": 10 },
-      "50-200 M": { "Adyen": 20, "Checkout.com": 15, "Worldpay": 10 },
-      "200+M": { "Adyen": 25, "Checkout.com": 20, "Worldpay": 15 }
-    };
-    if (revenueScores[formData.annualRevenue]?.[gateway.name]) {
-        bonus += revenueScores[formData.annualRevenue][gateway.name];
+    if (scoreConfig.bonuses.revenueBonus[formData.annualRevenue]?.[gateway.name]) {
+        bonus += scoreConfig.bonuses.revenueBonus[formData.annualRevenue][gateway.name];
     }
 
     return bonus;
 };
 
 // Helper function to calculate a bonus based on special features.
-const calculateFeatureBonus = (gateway: PaymentGateway, formData: FormData): number => {
+const calculateFeatureBonus = (gateway: PaymentGateway, formData: FormData, scoreConfig: any): number => {
     let bonus = 0;
-    // Add bonus for gateways with comprehensive feature sets
-    if (gateway.features.length > 4) {
-        bonus += 10;
+    if (formData.needGatewayTokens && gateway.gatewayTokensSupported === "Yes") {
+        bonus += scoreConfig.bonuses.featureBonus.gatewayTokens;
     }
-    // Add bonus for gateways with extensive technical capabilities
-    if (gateway.technicalDetails.length > 8) {
-        bonus += 5;
+    if (formData.admitToolImport && gateway.admitToolCanImportData === "Yes") {
+        bonus += scoreConfig.bonuses.featureBonus.admitTool;
     }
     return bonus;
 };
 
 // Main function to calculate the total score for a gateway.
-const calculateGatewayScore = (gateway: PaymentGateway, formData: FormData): number => {
-  let score = 50; // Base score
+const calculateGatewayScore = (gateway: PaymentGateway, formData: FormData, scoreConfig: any): number => {
+  let score = scoreConfig.baseScore; // Use the base score from the config
 
-  score += calculatePerfectMatchBonus(gateway, formData);
-  score += calculateContextualBonus(gateway, formData);
-  score += calculateFeatureBonus(gateway, formData);
+  score += calculatePerfectMatchBonus(gateway, formData, scoreConfig);
+  score += calculateContextualBonus(gateway, formData, scoreConfig);
+  score += calculateFeatureBonus(gateway, formData, scoreConfig);
 
   // Additional bonus for extensive coverage
   const globalGateways = ["Adyen", "Stripe", "PayPal", "Worldpay", "Checkout.com"];
   if (formData.currencies.length > 3 && globalGateways.includes(gateway.name)) {
-      score += 10;
+      score += scoreConfig.bonuses.globalCoverage;
   }
   if (formData.paymentMethods.length > 5 && globalGateways.includes(gateway.name)) {
-      score += 10;
+      score += scoreConfig.bonuses.globalCoverage;
   }
 
   // Ensure score does not exceed 100
@@ -112,6 +90,7 @@ export default function GatewayResults({ formData, showResults, showDetailedQues
   const [detailedData, setDetailedData] = useState<Partial<FormData>>({});
   const [marketSearch, setMarketSearch] = useState("");
   const [targetMarketSearch, setTargetMarketSearch] = useState("");
+  const scoreConfig = useScoreConfig(); // Get the dynamic score config
 
   const markets = [
     "United States", "United Kingdom", "Canada", "Germany", "France", "Australia",
@@ -120,6 +99,7 @@ export default function GatewayResults({ formData, showResults, showDetailedQues
     "Singapore", "New Zealand", "Brazil", "Mexico", "India", "China", "South Korea",
     "EMEA", "LATAM", "APAC", "NA"
   ];
+
   if (!showResults) {
     return (
       <div className="flex items-center justify-center h-64 text-muted-foreground">
@@ -133,7 +113,7 @@ export default function GatewayResults({ formData, showResults, showDetailedQues
 
   const scoredGateways = gatewayDatabase.map(gateway => ({
     ...gateway,
-    score: calculateGatewayScore(gateway, formData)
+    score: calculateGatewayScore(gateway, formData, scoreConfig)
   }));
 
   const filteredGateways = scoredGateways
