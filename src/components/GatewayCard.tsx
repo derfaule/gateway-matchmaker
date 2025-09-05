@@ -29,13 +29,16 @@ const GatewayCard = ({
 }: Props) => {
   const [showDetails, setShowDetails] = useState(false);
 
-  const getDisplayCurrencies = () => {
-    const userSelected = gateway.supportedCurrencies.filter(curr =>
-      formData.currencies.includes(curr)
-    );
-    const notSelected = gateway.supportedCurrencies.filter(curr =>
-      !formData.currencies.includes(curr)
-    );
+ const getDisplayCurrencies = () => {
+    const prioritized = gateway.supportedCurrencies.filter(curr => formData.currencies.includes(curr));
+    const notSelected = gateway.supportedCurrencies.filter(curr => !formData.currencies.includes(curr));
+    
+    // Logic to display 8 currencies with a random shuffle on the remaining
+    const displayed = [...prioritized, ...shuffleArray(notSelected)].slice(0, 8);
+    const remainingCount = gateway.supportedCurrencies.length - displayed.length;
+    
+    return { displayed, remainingCount };
+};
     
     // Limit to maximum 8 total
     const maxDisplay = 8;
@@ -52,10 +55,16 @@ const GatewayCard = ({
     return { displayed, remainingCount };
   };
 
-  const getDisplayPaymentMethods = () => {
-    const userSelected = gateway.supportedPaymentMethods.filter(method =>
-      formData.paymentMethods.includes(method)
-    );
+const getDisplayPaymentMethods = () => {
+    // These arrays are no longer needed since we're showing all
+    // const prioritized = gateway.supportedPaymentMethods.filter(method => formData.paymentMethods.includes(method));
+    // const notSelected = gateway.supportedPaymentMethods.filter(method => !formData.paymentMethods.includes(method));
+    // const shuffled = shuffleArray(notSelected);
+    // return [...prioritized, ...shuffled].slice(0, 5);
+    
+    // Updated logic: Return the full list of supported payment methods
+    return gateway.supportedPaymentMethods;
+};
     const notSelected = gateway.supportedPaymentMethods.filter(method =>
       !formData.paymentMethods.includes(method)
     );
