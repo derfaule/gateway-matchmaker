@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import GatewayForm, { FormData } from "@/components/GatewayForm";
 import GatewayResults from "@/components/GatewayResults";
+
 const Index = () => {
   const [formData, setFormData] = useState<FormData>({
     country: "",
@@ -13,14 +14,29 @@ const Index = () => {
   });
   const [showResults, setShowResults] = useState(false);
   const [showDetailedQuestions, setShowDetailedQuestions] = useState(false);
+  
+  // Use a ref to store the timeout ID
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   const handleFormChange = (data: FormData, isComplete: boolean) => {
-    setFormData(data);
-    setShowResults(isComplete);
+    // Clear the previous timeout if it exists
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    // Set a new timeout to update state after a delay
+    timeoutRef.current = setTimeout(() => {
+      setFormData(data);
+      setShowResults(isComplete);
+    }, 500); // 500ms debounce
   };
+
   const handleDetailedQuestionsToggle = (enabled: boolean) => {
     setShowDetailedQuestions(enabled);
   };
-  return <div className="min-h-screen bg-background">
+
+  return (
+    <div className="min-h-screen bg-background">
       {/* Header Section */}
       <div className="bg-gradient-to-r from-yellow-brand to-yellow-brand/90 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -29,10 +45,9 @@ const Index = () => {
               Find Your Perfect Payment Gateway
             </h1>
             <p className="text-lg text-yellow-brand-foreground/80 max-w-3xl mx-auto mb-6">
-              Recurly works with multiple payment gateways globally. Use our tool to quickly 
+              Recurly works with multiple payment gateways globally. Use our tool to quickly
               compare costs and find the best gateway for your business.
             </p>
-            
           </div>
         </div>
       </div>
@@ -47,11 +62,15 @@ const Index = () => {
           </div>
 
           {/* Results Section */}
-          {showResults && <div className="transition-all duration-500 ease-in-out">
+          {showResults && (
+            <div className="transition-all duration-500 ease-in-out">
               <GatewayResults formData={formData} showResults={showResults} showDetailedQuestions={showDetailedQuestions} />
-            </div>}
+            </div>
+          )}
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default Index;
