@@ -42,10 +42,11 @@ const countries = [
 ];
 
 const currencies = [
-  "USD", "EUR", "GBP", "CAD", "AUD", "JPY", "CHF", "SEK", "NOK", "DKK", 
+  "USD", "EUR", "GBP", "CAD", "AUD", "JPY", "CHF", "SEK", "NOK", "DKK",
   "SGD", "HKD", "BRL", "MXN", "INR", "CNY", "KRW", "ZAR", "RUB", "PLN",
   "CZK", "HUF", "THB", "MYR", "PHP", "IDR", "VND", "TRY", "ILS", "AED"
 ];
+
 
 const industries = ["Construction", "Retail", "Software", "Financial Services", "Healthcare", "Education", "Entertainment", "Manufacturing", "Professional Services", "Real Estate", "Travel & Hospitality", "Food & Beverage", "Automotive", "Technology", "Consulting", "Media & Publishing", "Non-profit"];
 
