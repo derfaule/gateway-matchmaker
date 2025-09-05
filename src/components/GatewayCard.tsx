@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,6 @@ interface Props {
   isSystemSuggested?: boolean;
 }
 
-// A correct and reliable Fisher-Yates shuffle function
 function shuffleArray<T>(array: T[]): T[] {
   const newArray = [...array];
   for (let i = newArray.length - 1; i > 0; i--) {
@@ -29,31 +28,47 @@ const GatewayCard = ({
 }: Props) => {
   const [showDetails, setShowDetails] = useState(false);
 
- const getDisplayCurrencies = () => {
-    const prioritized = gateway.supportedCurrencies.filter(curr => formData.currencies.includes(curr));
-    const notSelected = gateway.supportedCurrencies.filter(curr => !formData.currencies.includes(curr));
+  const currencyData = useMemo(() => {
+    const userSelected = gateway.supportedCurrencies.filter(curr =>
+      formData.currencies.includes(curr)
+    );
+    const notSelected = gateway.supportedCurrencies.filter(curr =>
+      !formData.currencies.includes(curr)
+    );
     
-    // Logic to display 8 currencies with a random shuffle on the remaining
-    const displayed = [...prioritized, ...shuffleArray(notSelected)].slice(0, 8);
-    const remainingCount = gateway.supportedCurrencies.length - displayed.length;
+    const maxDisplay = 8;
+    const shuffledRemaining = shuffleArray(notSelected);
+    const remainingSlots = Math.max(0, maxDisplay - userSelected.length);
+    
+    const displayed = [
+      ...userSelected,
+      ...shuffledRemaining.slice(0, remainingSlots)
+    ].slice(0, maxDisplay);
+    
+    const remainingCount = Math.max(0, gateway.supportedCurrencies.length - displayed.length);
     
     return { displayed, remainingCount };
-};
+  }, [gateway.supportedCurrencies, formData.currencies]);
 
-
-const getDisplayPaymentMethods = () => {
-    // These arrays are no longer needed since we're showing all
-    // const prioritized = gateway.supportedPaymentMethods.filter(method => formData.paymentMethods.includes(method));
-    // const notSelected = gateway.supportedPaymentMethods.filter(method => !formData.paymentMethods.includes(method));
-    // const shuffled = shuffleArray(notSelected);
-    // return [...prioritized, ...shuffled].slice(0, 5);
+  const displayPaymentMethods = useMemo(() => {
+    const userSelected = gateway.supportedPaymentMethods.filter(method =>
+      formData.paymentMethods.includes(method)
+    );
+    const notSelected = gateway.supportedPaymentMethods.filter(method =>
+      !formData.paymentMethods.includes(method)
+    );
     
-    // Updated logic: Return the full list of supported payment methods
-    return gateway.supportedPaymentMethods;
-};
-
-  const currencyData = getDisplayCurrencies();
-  const displayPaymentMethods = getDisplayPaymentMethods();
+    const maxDisplay = 5;
+    const shuffledRemaining = shuffleArray(notSelected);
+    const remainingSlots = Math.max(0, maxDisplay - userSelected.length);
+    
+    const displayed = [
+      ...userSelected,
+      ...shuffledRemaining.slice(0, remainingSlots)
+    ].slice(0, maxDisplay);
+    
+    return displayed;
+  }, [gateway.supportedPaymentMethods, formData.paymentMethods]);
 
   return (
     <Card className="p-6 relative bg-gateway-card border-gateway-border hover:shadow-lg transition-shadow duration-300">
@@ -64,7 +79,6 @@ const getDisplayPaymentMethods = () => {
       )}
       
       <div className="space-y-4">
-        {/* Header */}
         <div className="flex items-start space-x-4">
           <div className="text-3xl">{gateway.logo}</div>
           <div className="flex-1">
@@ -80,7 +94,6 @@ const getDisplayPaymentMethods = () => {
           </div>
         </div>
 
-        {/* Top Supported Currencies */}
         <div className="space-y-2">
           <h5 className="font-medium text-sm text-foreground">Top Supported Currencies</h5>
           <div className="flex flex-wrap gap-1">
@@ -101,7 +114,6 @@ const getDisplayPaymentMethods = () => {
           </div>
         </div>
 
-        {/* Supported Payment Methods */}
         <div className="space-y-2">
           <h5 className="font-medium text-sm text-foreground">Supported Payment Methods</h5>
           <div className="flex flex-wrap gap-1">
@@ -117,7 +129,6 @@ const getDisplayPaymentMethods = () => {
           </div>
         </div>
 
-        {/* Key Features */}
         <div className="space-y-2">
           <h5 className="font-medium text-sm text-foreground">Key Features</h5>
           <div className="space-y-1">
@@ -130,7 +141,6 @@ const getDisplayPaymentMethods = () => {
           </div>
         </div>
 
-        {/* More Details Button */}
         <Button variant="outline" size="sm" className="w-full" onClick={() => setShowDetails(!showDetails)}>
           {showDetails ? (
             <>
@@ -143,7 +153,6 @@ const getDisplayPaymentMethods = () => {
           )}
         </Button>
 
-        {/* Expandable Technical Details */}
         {showDetails && (
           <div className="mt-4 p-4 bg-muted rounded-lg space-y-3 border-l-4 border-primary">
             <h5 className="font-medium text-sm text-foreground">Technical Details</h5>
