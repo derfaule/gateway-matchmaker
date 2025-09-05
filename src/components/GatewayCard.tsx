@@ -51,22 +51,6 @@ const getDisplayPaymentMethods = () => {
     // Updated logic: Return the full list of supported payment methods
     return gateway.supportedPaymentMethods;
 };
-    const notSelected = gateway.supportedPaymentMethods.filter(method =>
-      !formData.paymentMethods.includes(method)
-    );
-    
-    // Limit to maximum 5 total
-    const maxDisplay = 5;
-    const shuffledRemaining = shuffleArray(notSelected);
-    const remainingSlots = Math.max(0, maxDisplay - userSelected.length);
-    
-    const displayed = [
-      ...userSelected,
-      ...shuffledRemaining.slice(0, remainingSlots)
-    ].slice(0, maxDisplay);
-    
-    return displayed;
-  };
 
   const currencyData = getDisplayCurrencies();
   const displayPaymentMethods = getDisplayPaymentMethods();
